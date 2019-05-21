@@ -1,12 +1,15 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require 'league'
+require '/.lib/league'
 
-class LeaugeTest < Minitest:: Test
+class LeagueTest < Minitest:: Test
   def setup
+    @league = League.new
   end
 
   def test_it_exists
+    expected = League
+    actual = @League
   end
 
   def test_number_of_teams_in_League
@@ -67,5 +70,5 @@ class LeaugeTest < Minitest:: Test
     expected = array
     actual = @league.worst_fans
     assert_equal expected, actual
-  end 
+  end
 end
