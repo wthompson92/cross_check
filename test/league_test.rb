@@ -9,16 +9,16 @@ class LeagueTest < Minitest:: Test
 
   def test_it_exists
     expected = League
-    actual = @League
+    actual = @league
   end
 
-  def test_number_of_teams_in_League
+  def test_number_of_teams_in_league
     expected = int
     actual = @league.count_of_teams
     assert_equal expected, actual
   end
 
-  def test_leauge_offence_data
+  def test_league_offence_data
     expected = string
     actual = @league.best_offense
     assert_equal expected, actual
@@ -28,7 +28,7 @@ class LeagueTest < Minitest:: Test
     assert_equal expected, actual
   end
 
-  def test_leauge_defense_data
+  def test_league_defense_data
     expected = string
     actual = @league.best_defense
     assert_equal expected, actual
@@ -44,7 +44,7 @@ class LeagueTest < Minitest:: Test
     assert_equal expected, actual
 
     expected = string
-    actual = @leauge.highest_scoring_home_team
+    actual = @league.highest_scoring_home_team
     assert_equal expected, actual
   end
 
