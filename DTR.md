@@ -68,3 +68,8 @@ Additional Notes:
 - First review: Wednesday!
 - Second review: Tuesday, the 28th
 - Project due: Thursday, the 30th by 8:00am
+
+
+Day 2 Completed
+- stat_tracker completed!!
+- Iteration test skeletons written!
