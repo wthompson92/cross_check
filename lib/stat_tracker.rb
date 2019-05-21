@@ -1,8 +1,10 @@
 class StatTracker
 
   def initialize(locations)
-    @game = game
-    
+    @game_path = game_path
+    @team_path =
+    @game_teams_path =
+    @location
   end
 
   def self.from_csv(locations)
