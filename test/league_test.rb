@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require '/.lib/league'
+require './lib/league'
 
 class LeagueTest < Minitest:: Test
   def setup
@@ -22,6 +22,7 @@ class LeagueTest < Minitest:: Test
     expected = string
     actual = @league.best_offense
     assert_equal expected, actual
+
     expected = string
     actual = @league.worst_offense
     assert_equal expected, actual
@@ -31,6 +32,7 @@ class LeagueTest < Minitest:: Test
     expected = string
     actual = @league.best_defense
     assert_equal expected, actual
+
     expected = string
     actual = @league.worst_defense
     assert_equal expected, actual
