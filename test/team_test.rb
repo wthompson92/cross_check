@@ -54,7 +54,7 @@ class TeamTest < Minitest:: Test
     assert_equal expected, actual
   end
 
-  def test_biggest_difference_in_scroring
+  def test_biggest_difference_in_scoring
     actual = int
     expected = @team.biggest_team_blowout
     assert_equal expected, actual
