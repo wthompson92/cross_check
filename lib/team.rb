@@ -1,14 +1,12 @@
-<<<<<<< HEAD
-class Teams
-  def initialize(hash)
-    @hash = hash
-  end
-=======
-require 'pry'
-require 'csv'
 
 class Team
 
+  attr_reader :team_id,
+              :franchise_id,
+              :short_name,
+              :team_name,
+              :abbreviation,
+              :link
   def initialize(row)
     @team_id = row[:team_id]
     @franchise_id = row[:franchiseid]
@@ -17,6 +15,4 @@ class Team
     @abbreviation = row[:abbreviation]
     @link = row[:link]
   end
-
->>>>>>> 6c5100dcefa23998f4b979e24d22787bcd950e8e
 end
