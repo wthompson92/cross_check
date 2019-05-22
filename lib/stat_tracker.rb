@@ -3,25 +3,20 @@ require 'csv'
 class StatTracker
 attr_reader :games, :teams, :game_teams
 
-  def initialize(games, teams, game_teams)
-    @games = games
-    @teams = teams
-    @game_teams = game_teams
+  def initialize(locations)
+    @games = []
+    @teams = []
+    @game_teams = []
+    @locations = locations
   end
 
-  def self.build_table(location)
-    CSV.table(location, headers: true)
+  def self.build_table(locations)
+    CSV.table(locations, headers: true)
   end
 
   def self.from_csv(locations)
-    games = build_table(locations[:games])
-    teams = build_table(locations[:teams])
-    game_teams = build_table(locations[:game_teams])
-
-    self.new(games, teams, game_teams)
+    @games << build_table(locations[:games])
+    @teams << build_table(locations[:teams])
+    @game_teams << build_table(locations[:game_teams])
   end
 end
-
-
-
-  # @games << Game.new(row)
