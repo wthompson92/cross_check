@@ -31,4 +31,8 @@ attr_reader :games, :teams, :game_teams
   end
 
 
+
+    self.new(games, teams, game_teams)
+  end
+
 end
