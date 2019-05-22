@@ -1,9 +1,8 @@
-module League
+module LeagueModule
   def get_teams
     team_ids = []
-    game_team.each do |instance|
-      team_ids << instance.away_team_id
-      team_ids << instance.home_team_id
+    game_teams.each do |instance|
+      team_ids << instance.team_id
     end
     team_ids.uniq
   end

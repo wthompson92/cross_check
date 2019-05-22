@@ -19,7 +19,7 @@ class LeagueTest < Minitest::Test
   end
 
   def test_number_of_teams_in_league
-    expected = int
+    expected = 2
     actual = @stat_tracker.count_of_teams
     assert_equal expected, actual
   end
