@@ -11,13 +11,28 @@ module LeagueModule
     get_teams.count
   end
 
-  def total_goals_scored_by_team
-    goals_by_team = get_teams.map do |teams|
-      team.sum do |instance|
-      instance.goals
+  def number_of_games_total_played_by_each_team
+  end
+
+  def total_goals_scored_by_each_team
+    game_teams.group_by do |instance|
+    {instance.team_id =>  instance.goals}
+        end
+      end
     end
-    goals_by_team.sort!
-    end
+
+
+  def total_goals_scored_on_each_team
+  end
+
+  def total_goals_scored_by_each_team_as_home_team
+  end
+
+  def total_goals_scored_by_each_team_as_away_team
+  end
+
+  def biggest_home_v_away_winrate_by_team
+  end
 
 
   def best_offense
@@ -25,4 +40,30 @@ module LeagueModule
 
   def worst_offense
   end
-end
+
+  def best_defense
+  end
+
+  def worst_defense
+  end
+
+  def highest_scoring_visitor
+  end
+
+  def lowest_scoring_visitor
+  end
+
+  def highest_scoring_home_team
+  end
+
+  def lowest_scoring_home_team
+  end
+
+  def winningest_team
+  end
+
+  def best_fans
+  end
+
+  def  worst_fans
+  end

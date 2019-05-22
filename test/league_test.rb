@@ -19,14 +19,20 @@ class LeagueTest < Minitest::Test
   end
 
   def test_number_of_teams_in_league
-    expected = 2
+    expected = 2 
     actual = @stat_tracker.count_of_teams
     assert_equal expected, actual
   end
 
-  def test_total_goals_scored
-    expected = 23
-    actual = @stat_tracker.total_goals_scored
+  def test_number_of_games_total_played_by_each_team
+    expected = 5
+    actual = @stat_tracker.number_of_games_total_played_by_each_team
+    assert_equal expected, actual
+  end
+
+  def test_total_goals_scored_by_each_team
+    expected = []
+    actual = @stat_tracker.total_goals_scored_by_each_team
     assert_equal expected, actual
   end
 
