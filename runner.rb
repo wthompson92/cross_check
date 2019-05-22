@@ -1,9 +1,9 @@
 require './lib/stat_tracker'
 require 'pry'
 
-game_path = './data/game_dummy.csv'
-team_path = './data/team_info_dummy.csv'
-game_teams_path = './data/game_teams_stats_dummy.csv'
+game_path = './data/game.csv'
+team_path = './data/team_info.csv'
+game_teams_path = './data/game_teams_stats.csv'
 
 locations = {
   games: game_path,
