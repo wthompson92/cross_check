@@ -11,11 +11,14 @@ module LeagueModule
     get_teams.count
   end
 
-  def total_goals_scored
-    game_teams.sum do |instance|
+  def total_goals_scored_by_team
+    goals_by_team = get_teams.map do |teams|
+      team.sum do |instance|
       instance.goals
     end
-  end 
+    goals_by_team.sort!
+    end
+
 
   def best_offense
   end
