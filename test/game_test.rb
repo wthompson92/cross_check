@@ -1,12 +1,11 @@
 require_relative 'test_helper'
-
+require 'csv'
+require 'pry'
+require './runner'
+require 'stat_tracker'
+require './lib/game'
 
 class GameTest < Minitest::Test
-
-  def test_it_exists
-
-    assert_instance_of Game, game
-  end
 
   def test_highest_total_score
     expected = int
