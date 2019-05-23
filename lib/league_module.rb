@@ -12,10 +12,13 @@ module LeagueModule
   end
 
   def number_of_games_total_played_by_each_team
+    games_grouped = game_teams.group_by do |game|
+      game.team_id
+    end 
   end
 
   def total_goals_scored_by_each_team
-    game_teams.group_by do |instance|
+    game_teams.map do |instance|
     {instance.team_id =>  instance.goals}
         end
       end
