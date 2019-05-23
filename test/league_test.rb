@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
+require 'pry'
 
 class LeagueTest < Minitest::Test
     def setup
@@ -19,13 +20,13 @@ class LeagueTest < Minitest::Test
   end
 
   def test_number_of_teams_in_league
-    expected = 2 
+    expected = 2
     actual = @stat_tracker.count_of_teams
     assert_equal expected, actual
   end
 
   def test_number_of_games_total_played_by_each_team
-    expected = 5
+    expected = {"3"=>5, "6"=>4}
     actual = @stat_tracker.number_of_games_total_played_by_each_team
     assert_equal expected, actual
   end

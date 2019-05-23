@@ -2,8 +2,8 @@ module LeagueModule
   def get_teams
     team_ids = []
     game_teams.each do |instance|
-      team_ids << instance.team_id
-    end
+    team_ids << instance.team_id
+  end
     team_ids.uniq
   end
 
@@ -12,17 +12,15 @@ module LeagueModule
   end
 
   def number_of_games_total_played_by_each_team
-    games_grouped = game_teams.group_by do |game|
-      game.team_id
-    end 
+    games_grouped = game_teams.group_by{|game| game.team_id }
+  games_grouped.transform_values{|values| values.count }
   end
 
   def total_goals_scored_by_each_team
-    game_teams.map do |instance|
-    {instance.team_id =>  instance.goals}
-        end
-      end
-    end
+  goals_grouped = game_teams.group_by{|game| game.team_id }
+  goals_grouped.transform_values{|values| values.sum {|value|
+    value.goals}}
+  end
 
 
   def total_goals_scored_on_each_team
@@ -70,3 +68,4 @@ module LeagueModule
 
   def  worst_fans
   end
+end
