@@ -32,16 +32,15 @@ class LeagueTest < Minitest::Test
   end
 
   def test_total_goals_scored_by_each_team
-    expected = []
+    expected = {"3"=>10, "6"=>13}
     actual = @stat_tracker.total_goals_scored_by_each_team
     assert_equal expected, actual
   end
 
 
   def test_league_offence_data
-    skip
-    expected = string
-    actual = @league.best_offense
+    expected = []
+    actual = @stat_tracker.best_offense
     assert_equal expected, actual
 
     expected = string

@@ -37,9 +37,23 @@ module LeagueModule
 
 
   def best_offense
+    hash = Hash.new
+    total_goals_scored_by_each_team.map do |key, value|
+      number_of_games_total_played_by_each_team.map do |k, v|
+      hash[key] = value / v.to_f
+     end
+     end
+     hash.max_by{|k,v| k = v}
   end
 
   def worst_offense
+    hash = Hash.new
+    total_goals_scored_by_each_team.map do |key, value|
+      number_of_games_total_played_by_each_team.map do |k, v|
+      hash[key] = value / v.to_f
+     end
+     end
+     hash.min_by{|k,v| k = v}
   end
 
   def best_defense
