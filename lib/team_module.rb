@@ -1,23 +1,71 @@
-require './runner'
 require 'pry'
 
 module TeamModule
 
+  def team_by_id(team_id)
+    teams.find do |team|
+      team.team_id == team_id
+    end
+  end
+
   def team_info(team_id)
-    stat_tracker.teams
+    team_obj = team_by_id(team_id)
+    my_team = { "team_id" => team_obj.team_id,
+      "franchise_id" => team_obj.franchise_id,
+    "short_name" => team_obj.short_name,
+    "team_name" => team_obj.team_name,
+    "abbreviation" => team_obj.abbreviation,
+    "link" => team_obj.link}
   end
 
-  def best_season
-    binding.pry
-    # get array of team_id
-    # for each team_id or group by team_id, ( see stack overflow)
-    # iterate over :won and return all true for team.count
-    # store the best score in maybe a hash {:id => team_score}
-    # return highest win percentage
+  def games_played(team_id)
+    games.find_all do |game|
+      game.away_team_id == team_id || game.home_team_id == team_id
+    end
   end
 
-  def worst_season
-    # return lowest win percentage
+  def total_seasons(team_id)
+    seasons = []
+    games_played(team_id).each do |game|
+      seasons << game.season
+    end
+    seasons.uniq
+  end
+
+  def win_perc_by_season(seasons, games, team_id)
+    win_percent_by_season = {}
+    seasons.find_all do |season|
+      wins = 0
+      games_by_season = 0
+      games.find_all do |game|
+        if game.season == season
+          games_by_season += 1
+          if game.away_team_id == team_id && game.outcome.split.first == "away"
+            wins += 1
+          end
+          if game.home_team_id == team_id && game.outcome.split.first == "home"
+            wins += 1
+          end
+        end
+      end
+      winning_percentage = (wins.to_f / games_by_season * 100).to_i
+      win_percent_by_season.store(season, winning_percentage)
+    end
+    win_percent_by_season
+  end
+
+  def best_season(team_id)
+    seasons = total_seasons(team_id)
+    games = games_played(team_id)
+    winning_percentages = win_perc_by_season(seasons, games, team_id)
+    winning_percentages.max_by { |k,v| v }.first
+  end
+
+  def worst_season(team_id)
+    seasons = total_seasons(team_id)
+    games = games_played(team_id)
+    winning_percentages = i_dont_know(seasons, games, team_id)
+    winning_percentages.min_by { |k,v| v }.first
   end
 
   def average_win_percentage
