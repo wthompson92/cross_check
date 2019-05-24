@@ -122,4 +122,5 @@ class TeamTest < Minitest::Test
     actual = @stat_tracker.seasonal_summary
     assert_equal expected, actual
   end
+
 end
