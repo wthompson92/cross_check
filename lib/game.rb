@@ -17,9 +17,10 @@ class Game
               :venue_time_zone_id,
               :venue_time_zone_offset,
               :venue_time_zone_tz
+
   def initialize(row)
     @game_id = row[:game_id]
-    @season = row[:season]
+    @season = row[:season].to_i
     @type = row[:type]
     @date_time = row[:date_time]
     @away_team_id = row[:away_team_id]
@@ -35,8 +36,5 @@ class Game
     @venue_time_zone_tz = row[:venue_time_zone_tz]
 
   end
-
-
-
 
 end
