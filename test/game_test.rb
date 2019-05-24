@@ -1,5 +1,4 @@
 require_relative 'test_helper'
-require 'csv'
 require 'pry'
 require './lib/game'
 require './lib/stat_tracker'
@@ -19,7 +18,7 @@ class GameTest < Minitest::Test
     end
 
     def test_highest_total_score
-      expected = 10
+      expected = 11
       assert_equal expected, @stat_tracker.highest_total_score
     end
 
@@ -34,27 +33,27 @@ class GameTest < Minitest::Test
     end
 
     def test_percentage_home_wins
-      expected = 66.67
+      expected = 50.0
       assert_equal expected, @stat_tracker.percentage_home_wins
     end
 
     def test_percentage_visitor_wins
-      expected = 33.33
+      expected = 50.0
       assert_equal expected, @stat_tracker.percentage_visitor_wins
     end
 
     def test_count_of_games_by_season
-      expected = {"20122013" => 9}
+      expected = {"20122013" => 9, "20142015"=>11}
       assert_equal expected, @stat_tracker.count_of_games_by_season
     end
 
     def test_average_goals_per_game
-      expected = 5.11
+      expected = 5.25
       assert_equal expected, @stat_tracker.average_goals_per_game
     end
-  #
+
     def test_average_goals_by_season
-      expected = {"20122013" => 5.11}
+      expected = {"20122013" => 5.11, "20142015"=>5.36}
       assert_equal expected, @stat_tracker.average_goals_by_season
     end
 end
