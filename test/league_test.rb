@@ -80,7 +80,7 @@ class LeagueTest < Minitest::Test
   end
 
   def test_lowest_scoring_teams
-    
+
     expected = "Panthers"
     actual =
     @stat_tracker.lowest_scoring_visitor
@@ -90,4 +90,30 @@ class LeagueTest < Minitest::Test
     actual = @stat_tracker.lowest_scoring_home_team
     assert_equal expected, actual
   end
+
+  def test_total_scored_on_by_team
+    expected = ["6", 7]
+    actual = @stat_tracker.total_scored_on_by_team.first
+    assert_equal expected, actual
+  end
+
+  def test_best_defense
+    expected  = "Sabres"
+    actual = @stat_tracker.best_defense
+    assert_equal expected, actual
+  end
+
+  def test_worst_defense
+    expected  = "Red Wings"
+    actual = @stat_tracker.worst_defense
+    assert_equal expected, actual
+  end
+
+  def test_away_goals_by_team
+    expected = ["6", 16]
+    actual = @stat_tracker.away_goals_by_team.first
+    assert_equal expected, actual
+  end
+
+
 end
