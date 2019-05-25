@@ -3,19 +3,11 @@ require_relative 'game'
 require_relative 'team'
 require_relative 'game_team'
 require_relative 'game_module'
-<<<<<<< HEAD
 require_relative 'league_module'
 
 class StatTracker
     include GameModule
     include LeagueModule
-=======
-require_relative 'team_module_two'
-
-class StatTracker
-    include GameModule
-    include TeamModule
->>>>>>> af729e6f76c3e7f9e0963542019827ed37a261a3
 
     attr_reader :games, :teams, :game_teams
 
