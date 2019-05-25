@@ -4,14 +4,17 @@ require './lib/stat_tracker'
 require 'pry'
 
 class LeagueTest < Minitest::Test
-    def setup
-      locations = {
-        games: './data/game_dummy.csv',
-        teams: './data/team_info_dummy.csv',
-        game_teams: './data/game_teams_stats_dummy.csv'
-      }
-      @stat_tracker = StatTracker.from_csv(locations)
-    end
+
+  def setup
+    locations = {
+      games: './test/data/game.csv',
+      teams: './test/data/team_info.csv',
+      game_teams: './test/data/game_teams_stats.csv'
+    }
+
+    @stat_tracker = StatTracker.from_csv(locations)
+
+  end
 
   def test_it_exists
     expected = StatTracker
@@ -20,18 +23,21 @@ class LeagueTest < Minitest::Test
   end
 
   def test_number_of_teams_in_league
+    skip
     expected = 2
     actual = @stat_tracker.count_of_teams
     assert_equal expected, actual
   end
 
   def test_number_of_games_total_played_by_each_team
+    skip
     expected = {"3"=>5, "6"=>4}
     actual = @stat_tracker.number_of_games_total_played_by_each_team
     assert_equal expected, actual
   end
 
   def test_total_goals_scored_by_each_team
+    skip
     expected = {"3"=>10, "6"=>13}
     actual = @stat_tracker.total_goals_scored_by_each_team
     assert_equal expected, actual
@@ -39,6 +45,7 @@ class LeagueTest < Minitest::Test
 
 
   def test_league_offence_data
+    skip
     expected = []
     actual = @stat_tracker.best_offense
     assert_equal expected, actual
@@ -59,19 +66,25 @@ class LeagueTest < Minitest::Test
     assert_equal expected, actual
   end
 
-  def test_highest_scoring_methods
+  def test_average_home_goals
     skip
-    expected = string
-    actual = @league.highest_scoring_visitor
-    assert_equal expected, actual
+    @stat_tracker.average_goals_scored_by_home_team
 
-    expected = string
-    actual = @league.highest_scoring_home_team
+  end
+
+  def test_highest_scoring_teams
+
+    # expected = string
+    # actual = @league.highest_scoring_visitor
+    # assert_equal expected, actual
+
+    expected = "Golden Knights"
+    actual = @stat_tracker.highest_scoring_home_team
     assert_equal expected, actual
   end
 
 
-  def test_lowest_scoring_methods
+  def test_lowest_scoring_teams
     skip
     expected = string
     actual = @league.lowest_scoring_visitor
