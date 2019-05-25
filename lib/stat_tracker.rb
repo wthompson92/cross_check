@@ -8,6 +8,7 @@ require_relative 'league_module'
 class StatTracker
     include GameModule
     include LeagueModule
+    include TeamModule
 
     attr_reader :games, :teams, :game_teams
 
