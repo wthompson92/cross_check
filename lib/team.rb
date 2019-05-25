@@ -1,5 +1,3 @@
-require 'pry'
-require 'csv'
 
 class Team
   attr_reader :team_id,
@@ -18,5 +16,4 @@ class Team
     @link = row[:link]
 
   end
-
 end
