@@ -30,7 +30,6 @@ module TeamModule
   #   "link" => team.link}
   # end
 
-
 #### the method above can replace the two methods above.
 
   def games_played(team_id)

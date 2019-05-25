@@ -45,8 +45,6 @@ module LeagueModule
       end
     end
     scored_on
-    
-  end
 
   def home_goals_by_team
     home_goals = Hash.new(0)
@@ -73,6 +71,16 @@ module LeagueModule
   def total_goals_scored_by_each_team
     home_goals_by_team.merge(away_goals_by_team)
   end
+
+  def total_goals_scored_on_each_team
+  end
+
+  def total_goals_scored_by_each_team_as_away_team
+  end
+
+  def biggest_home_v_away_winrate_by_team
+  end
+
 
   def best_offense
     hash = Hash.new
@@ -163,7 +171,7 @@ module LeagueModule
   end
 
   def winningest_team
-  
+
     binding.pry
     # Name of the team with the highest win percentage across all seasons.
   end

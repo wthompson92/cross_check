@@ -20,6 +20,7 @@ class StatTrackerTest < Minitest::Test
       assert_instance_of StatTracker, @stat_tracker
     end
 
+
     def test_game_attributes
       assert_equal @stat_tracker.games.first.away_team_id, 3
       assert_equal @stat_tracker.games.first.home_team_id, 6
