@@ -20,8 +20,18 @@ module LeagueModule
     end
   end
 
-
-  def number_of_games_total_played_by_each_team
+  def total_scored_on_by_team
+    scored_on = Hash.new(0)
+    get_teams.each do |team|
+      games.each do |game|
+        if game.home_team_id == team
+          scored_on[team] += game.away_goals
+        else game.away_team_id == team
+          scored_on[team] += game.home_goals
+        end
+      end
+    end
+    scored_on
     hash = Hash.new(0)
     get_teams.each do |id|
     games.each do |game|
@@ -62,9 +72,6 @@ module LeagueModule
   def total_goals_scored_on_each_team
   end
 
-  def total_goals_scored_by_each_team_as_home_team
-  end
-
   def total_goals_scored_by_each_team_as_away_team
   end
 
@@ -95,9 +102,11 @@ module LeagueModule
   end
 
   def best_defense
+    total_scored_on_by_team.min_by { |k,v| v }
   end
 
   def worst_defense
+    total_scored_on_by_team.max_by { |k,v| v }
   end
 
   def highest_scoring_visitor
