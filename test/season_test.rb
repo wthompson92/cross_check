@@ -15,7 +15,7 @@ class SeasonTest < Minitest::Test
 
   def test_biggest_bust
     expected = ""
-    actual = @stat_tracker.biggest_bust
+    actual = @stat_tracker.biggest_bust()
     assert_equal expected, actual
   end
 
