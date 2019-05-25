@@ -41,7 +41,7 @@ module LeagueModule
       games.each do |game|
         if game.home_team_id == team
           scored_on[team] += game.away_goals
-        else game.away_team_id == team
+        elsif game.away_team_id == team
           scored_on[team] += game.home_goals
         end
       end
@@ -62,10 +62,12 @@ module LeagueModule
   end
 
   def away_goals_by_team
-   away_goals = Hash.new(0)
-   get_teams.each do |id| games.each do |game|
-    if game.away_team_id == (id)
-       away_goals[id] += game.away_goals
+
+    away_goals = Hash.new(0)
+    get_teams.each do |id|
+      games.each do |game|
+        if game.away_team_id == (id)
+          away_goals[id] += game.away_goals
         end
       end
     end
@@ -97,11 +99,13 @@ module LeagueModule
   end
 
   def best_defense
-    total_scored_on_by_team.min_by { |k,v| v }
+    best = total_scored_on_by_team.min_by { |k,v| v }
+    convert_id_to_name(best.first)
   end
 
   def worst_defense
-    total_scored_on_by_team.max_by { |k,v| v }
+    worst = total_scored_on_by_team.max_by { |k,v| v }
+    convert_id_to_name(worst.first)
   end
 
   def average_goals_scored_by_home_team
