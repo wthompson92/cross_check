@@ -34,7 +34,6 @@ class Game
     @venue_time_zone_id = row[:venue_time_zone_id]
     @venue_time_zone_offset = row[:venue_time_zone_offset]
     @venue_time_zone_tz = row[:venue_time_zone_tz]
-
   end
 
 end
