@@ -2,9 +2,10 @@ module LeagueModule
 
   def get_teams
     team_ids = []
-      game_teams.each do |instance|
-        team_ids << instance.team_id
-      end
+    games.each do |game|
+    team_ids << game.away_team_id
+    team_ids << game.home_team_id
+    end
     team_ids.uniq
   end
 
@@ -12,22 +13,66 @@ module LeagueModule
     get_teams.count
   end
 
+  def convert_id_to_name(team_id)
+    teams.find do |team|
+      if team.team_id == team_id.to_i
+       return team.team_name
+      end
+    end
+  end
+
   def number_of_games_total_played_by_each_team
-    games_grouped = game_teams.group_by{|game| game.team_id }
-    games_grouped.transform_values{|values| values.count }
+      hash = Hash.new(0)
+    get_teams.each do |id|
+    games.each do |game|
+    if (game.home_team_id || game.away_team_id) == (id)
+      hash[id] += 1
+        end
+      end
+    end
+  hash
+  end
+
+  def total_scored_on_by_team
+    scored_on = Hash.new(0)
+    get_teams.each do |team|
+      games.each do |game|
+        if game.home_team_id == team
+          scored_on[team] += game.away_goals
+        else game.away_team_id == team
+          scored_on[team] += game.home_goals
+        end
+      end
+    end
+    scored_on
+    
+  def home_goals_by_team
+    home_goals = Hash.new(0)
+    get_teams.each do |id|  games.each do |game|
+    if game.home_team_id == (id)
+      home_goals[id] = game.home_goals
+        end
+      end
+    end
+    home_goals
+  end
+
+  def away_goals_by_team
+   away_goals = Hash.new(0)
+   get_teams.each do |id| games.each do |game|
+    if game.away_team_id == (id)
+       away_goals[id] = game.away_goals
+        end
+      end
+    end
+    away_goals
   end
 
   def total_goals_scored_by_each_team
-  goals_grouped = game_teams.group_by{|game| game.team_id }
-  goals_grouped.transform_values{|values| values.sum {|value|
-    value.goals}}
+    home_goals_by_team.merge(away_goals_by_team)
   end
-
 
   def total_goals_scored_on_each_team
-  end
-
-  def total_goals_scored_by_each_team_as_home_team
   end
 
   def total_goals_scored_by_each_team_as_away_team
@@ -43,8 +88,9 @@ module LeagueModule
       number_of_games_total_played_by_each_team.map do |k, v|
       hash[key] = value / v.to_f
      end
-     end
-     hash.max_by{|k,v| k = v}
+   end
+     best = hash.max
+     convert_id_to_name(best.first)
   end
 
   def worst_offense
@@ -54,13 +100,16 @@ module LeagueModule
       hash[key] = value / v.to_f
      end
      end
-     hash.min_by{|k,v| k = v}
+     worst = hash.min
+     convert_id_to_name(worst.first)
   end
 
   def best_defense
+    total_scored_on_by_team.min_by { |k,v| v }
   end
 
   def worst_defense
+    total_scored_on_by_team.max_by { |k,v| v }
   end
 
   def home_goals_by_team
