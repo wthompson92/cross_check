@@ -10,12 +10,12 @@ module TeamModule
 
   def team_info(team_id)
     team_obj = team_by_id(team_id)
-    my_team = { "team_id" => team_obj.team_id,
+      my_team = { "team_id" => team_obj.team_id,
       "franchise_id" => team_obj.franchise_id,
-    "short_name" => team_obj.short_name,
-    "team_name" => team_obj.team_name,
-    "abbreviation" => team_obj.abbreviation,
-    "link" => team_obj.link}
+      "short_name" => team_obj.short_name,
+      "team_name" => team_obj.team_name,
+      "abbreviation" => team_obj.abbreviation,
+      "link" => team_obj.link }
   end
 
   def games_played(team_id)
@@ -58,18 +58,22 @@ module TeamModule
     seasons = total_seasons(team_id)
     games = games_played(team_id)
     winning_percentages = win_perc_by_season(seasons, games, team_id)
-    winning_percentages.max_by { |k,v| v }.first
+    winning_percentages.max_by { |season, win_percent| win_percent }.first
   end
 
   def worst_season(team_id)
     seasons = total_seasons(team_id)
     games = games_played(team_id)
-    winning_percentages = i_dont_know(seasons, games, team_id)
-    winning_percentages.min_by { |k,v| v }.first
+    winning_percentages = win_perc_by_season(seasons, games, team_id)
+    winning_percentages.min_by { |season, win_percent| win_percent }.first
   end
 
-  def average_win_percentage
-    # return average win percentage
+  def average_win_percentage(team_id)
+    seasons = total_seasons(team_id)
+    games = games_played(team_id)
+    winning_percentages = win_perc_by_season(seasons, games, team_id)
+    sum = winning_percentages.sum { |season, win_percent| win_percent }
+    (sum.to_f / games_played(team_id).count).round(2)
   end
 
   def most_goals_scored
