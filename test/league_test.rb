@@ -114,6 +114,4 @@ class LeagueTest < Minitest::Test
     actual = @stat_tracker.away_goals_by_team.first
     assert_equal expected, actual
   end
-
-
 end
