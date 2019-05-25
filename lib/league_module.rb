@@ -20,6 +20,18 @@ module LeagueModule
     end
   end
 
+  def number_of_games_total_played_by_each_team
+      hash = Hash.new(0)
+    get_teams.each do |id|
+    games.each do |game|
+    if (game.home_team_id || game.away_team_id) == (id)
+      hash[id] += 1
+        end
+      end
+    end
+  hash
+  end
+
   def total_scored_on_by_team
     scored_on = Hash.new(0)
     get_teams.each do |team|
@@ -32,16 +44,8 @@ module LeagueModule
       end
     end
     scored_on
-    hash = Hash.new(0)
-    get_teams.each do |id|
-    games.each do |game|
-    if (game.home_team_id || game.away_team_id) == (id)
-      hash[id] += 1
-        end
-      end
-    end
-  hash
-  end
+
+
 
   def home_goals_by_team
     home_goals = Hash.new(0)
@@ -121,15 +125,8 @@ module LeagueModule
   def lowest_scoring_home_team
   end
 
-  # def winningest_team
-  #   hash = Hash.new
-  #   total_goals_scored_by_each_team.map do |key, value|
-  #     number_of_games_total_played_by_each_team.map do |k, v|
-  #     hash[key] = value / v.to_f
-  #
-  #    worst  hash.min
-  #    convert_id_to_name worst.first
-  # end
+  def winningest_team
+  end
 
   def best_fans
   end
