@@ -20,7 +20,6 @@ module LeagueModule
     end
   end
 
-
   def number_of_games_total_played_by_each_team
     hash = Hash.new(0)
     get_teams.each do |id|
@@ -112,15 +111,8 @@ module LeagueModule
   def lowest_scoring_home_team
   end
 
-  # def winningest_team
-  #   hash = Hash.new
-  #   total_goals_scored_by_each_team.map do |key, value|
-  #     number_of_games_total_played_by_each_team.map do |k, v|
-  #     hash[key] = value / v.to_f
-  #
-  #    worst  hash.min
-  #    convert_id_to_name worst.first
-  # end
+  def winningest_team
+  end
 
   def best_fans
   end

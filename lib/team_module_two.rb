@@ -3,7 +3,6 @@ require 'pry'
 module TeamModule
 
   def seasonal_summary(team_id)
-
     group_team = games.select do |game|
       team_id == game.home_team_id || team_id == game.away_team_id
     end
