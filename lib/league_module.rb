@@ -1,8 +1,10 @@
 module LeagueModule
   def get_teams
+
     team_ids = []
-    game_teams.each do |instance|
-    team_ids << instance.team_id
+    games.each do |game|
+    team_ids << game.away_team_id
+    team_ids << game.home_team_id
   end
     team_ids.uniq
   end
@@ -11,9 +13,26 @@ module LeagueModule
     get_teams.count
   end
 
+  def convert_id_to_name(team_id)
+    if teams.any? do |team|
+      team.include?(team_id)
+      return team.short_name
+    end
+  end
+end 
+
+
   def number_of_games_total_played_by_each_team
-    games_grouped = game_teams.group_by{|game| game.team_id }
-  games_grouped.transform_values{|values| values.count }
+    hash = Hash.new(0)
+    get_teams.each do |id|
+    games.each do |game|
+    if (game.home_team_id || game.away_team_id) == (id)
+      then
+      hash[id] += 1
+    end
+  end
+  end
+  hash
   end
 
   def total_goals_scored_by_each_team
