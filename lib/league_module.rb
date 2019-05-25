@@ -1,10 +1,12 @@
+require 'pry'
+
 module LeagueModule
 
   def get_teams
     team_ids = []
     games.each do |game|
-    team_ids << game.away_team_id
-    team_ids << game.home_team_id
+      team_ids << game.away_team_id
+      team_ids << game.home_team_id
     end
     team_ids.uniq
   end
@@ -22,11 +24,11 @@ module LeagueModule
   end
 
   def number_of_games_total_played_by_each_team
-      hash = Hash.new(0)
+    hash = Hash.new(0)
     get_teams.each do |id|
-    games.each do |game|
-    if (game.home_team_id || game.away_team_id) == (id)
-      hash[id] += 1
+      games.each do |game|
+        if (game.home_team_id || game.away_team_id) == (id)
+          hash[id] += 1
         end
       end
     end
@@ -45,12 +47,14 @@ module LeagueModule
       end
     end
     scored_on
-    
+  end
+
   def home_goals_by_team
     home_goals = Hash.new(0)
-    get_teams.each do |id|  games.each do |game|
-    if game.home_team_id == (id)
-      home_goals[id] = game.home_goals
+    get_teams.each do |id|
+      games.each do |game|
+        if game.home_team_id == (id)
+          home_goals[id] = game.home_goals
         end
       end
     end
@@ -71,16 +75,6 @@ module LeagueModule
   def total_goals_scored_by_each_team
     home_goals_by_team.merge(away_goals_by_team)
   end
-
-  def total_goals_scored_on_each_team
-  end
-
-  def total_goals_scored_by_each_team_as_away_team
-  end
-
-  def biggest_home_v_away_winrate_by_team
-  end
-
 
   def best_offense
     hash = Hash.new
@@ -112,17 +106,7 @@ module LeagueModule
     total_scored_on_by_team.max_by { |k,v| v }
   end
 
-  def home_goals_by_team
-   home_goals = Hash.new
-    get_teams.each do |id|
-      games.each do |game|
-        if game.home_team_id == (id)
-          home_goals[id] += game.home_goals
-        end
-      end
-    end
-   home_goals
-  end
+
 
   def average_goals_scored_by_home_team
     home = Hash.new
@@ -168,13 +152,15 @@ module LeagueModule
     home = average_goals_scored_by_home_team
       team_id = home.min_by{ |team_id, goals| goals }.first.to_i
         teams.find { |team| team_id == team.team_id }.team_name
+
   end
 
-  def winningest_team
-  end
-
-  def best_fans
-  end
+  # def winningest_team
+  # end
+  #
+  # def best_fans
+  #
+  # end
 
   def  worst_fans
   end
