@@ -165,5 +165,4 @@ module LeagueModule
   def  worst_fans
     # list of names of all teams with better away records than home records.
   end
-
 end

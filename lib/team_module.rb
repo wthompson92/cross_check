@@ -18,17 +18,16 @@ module TeamModule
       "link" => team_obj.link }
   end
 
-  # def team_info(id)
-  #   team = teams.find{|x| x.team_id == id}
-  #
-  #   team_hash = {
-  #   "team_id" => team.team_id,
-  #   "franchise_id" => team.franchise_id,
-  #   "short_name" => team.short_name,
-  #   "team_name" => team.team_name,
-  #   "abbreviation" => team.abbreviation,
-  #   "link" => team.link}
-  # end
+  def team_info(id)
+    team = teams.find{|x| x.team_id == id}
+    team_hash = {
+    "team_id" => team.team_id,
+    "franchise_id" => team.franchise_id,
+    "short_name" => team.short_name,
+    "team_name" => team.team_name,
+    "abbreviation" => team.abbreviation,
+    "link" => team.link}
+  end
 
 #### the method above can replace the two methods above.
 
