@@ -1,6 +1,5 @@
 require 'pry'
 
-
 module GameModule
 
   def get_total_score
@@ -30,11 +29,11 @@ module GameModule
   end
 
   def percentage_home_wins
-    (win_counter("home") / games.count.to_f * 100).round(2)
+    (win_counter("home") / games.count.to_f).round(2)
   end
 
   def percentage_visitor_wins
-    (win_counter("away") / games.count.to_f * 100).round(2)
+    (win_counter("away") / games.count.to_f).round(2)
   end
 
   def count_of_games_by_season
