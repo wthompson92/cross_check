@@ -96,6 +96,12 @@ module TeamModule
     all_goals(team_id).min
   end
 
+  def win_percentage_against_all_teams(team_id)
+    games_played(team_id).group_by do |game|
+      game.outcome
+    end
+  end
+
   def favorite_opponent
     # opponent with lowest win percentage (string)
   end
