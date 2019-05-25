@@ -41,12 +41,12 @@ class LeagueTest < Minitest::Test
 
 
   def test_total_goals_scored_by_each_team
-    expected = ["6", 4]
+    expected = ["6", 16]
     actual = @stat_tracker.total_goals_scored_by_each_team.first
    assert_equal expected, actual
   end
 
-  def test_league_offence_data
+  def test_league_offense_data
     expected = "Senators"
     actual = @stat_tracker.best_offense
     assert_equal expected, actual
@@ -63,14 +63,13 @@ class LeagueTest < Minitest::Test
   end
 
   def test_average_away_goals
-    skip
     expected = ["6", 4.0]
     actual = @stat_tracker.average_goals_scored_by_away_team.first
     assert_equal expected, actual
   end
 
   def test_highest_scoring_teams
-    skip
+
     expected = "Oilers"
     actual =  @stat_tracker.highest_scoring_visitor
     assert_equal expected, actual
@@ -81,7 +80,7 @@ class LeagueTest < Minitest::Test
   end
 
   def test_lowest_scoring_teams
-    skip
+    
     expected = "Panthers"
     actual =
     @stat_tracker.lowest_scoring_visitor
