@@ -22,8 +22,8 @@ class StatTrackerTest < Minitest::Test
 
 
     def test_game_attributes
-      assert_equal @stat_tracker.games.first.away_team_id, 3
-      assert_equal @stat_tracker.games.first.home_team_id, 6
+      assert_equal @stat_tracker.games.first.away_team_id, "6"
+      assert_equal @stat_tracker.games.first.home_team_id, "5"
       assert_equal @stat_tracker.games.first.outcome, "home win OT"
       assert_equal @stat_tracker.games.first.game_id, "2012030221"
       assert_equal @stat_tracker.games.first.outcome, "away win REG"
@@ -41,8 +41,8 @@ class StatTrackerTest < Minitest::Test
     end
 
     def test_team_attributes
-      assert_equal @stat_tracker.teams.first.team_id, "1"
-      assert_equal @stat_tracker.teams.first.franchise_id, "23"
+      assert_equal @stat_tracker.teams.first.team_id, 1
+      assert_equal @stat_tracker.teams.first.franchise_id, 23
       assert_equal @stat_tracker.teams.first.short_name, "New Jersey"
       assert_equal @stat_tracker.teams.first.team_name, "Devils"
       assert_equal @stat_tracker.teams.first.abbreviation, "NJD"
@@ -53,14 +53,14 @@ class StatTrackerTest < Minitest::Test
       assert_equal @stat_tracker.game_teams.first.game_id, "2012030221"
       assert_equal @stat_tracker.game_teams.first.team_id, "3"
       assert_equal @stat_tracker.game_teams.first.hoa, "away"
-      assert_equal @stat_tracker.game_teams.first.won, FALSE
+      assert_equal @stat_tracker.game_teams.first.won, "FALSE"
       assert_equal @stat_tracker.game_teams.first.settled_in, "OT"
       assert_equal @stat_tracker.game_teams.first.head_coach, "John Tortorella"
       assert_equal @stat_tracker.game_teams.first.goals, 2
       assert_equal @stat_tracker.game_teams.first.shots, 35
       assert_equal @stat_tracker.game_teams.first.hits, 44
       assert_equal @stat_tracker.game_teams.first.pim, 8
-      assert_equal @stat_tracker.game_teams.first.power_play_opportunities, 3
+      assert_equal @stat_tracker.game_teams.first.power_play_opportunities, 0
       assert_equal @stat_tracker.game_teams.first.power_play_goals, 0
       assert_equal @stat_tracker.game_teams.first.face_off_win_percentage, 44.8
       assert_equal @stat_tracker.game_teams.first.giveaways, 17
