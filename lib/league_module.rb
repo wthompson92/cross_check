@@ -132,7 +132,7 @@ module LeagueModule
 
   def highest_scoring_visitor
       team_id = average_goals_scored_by_away_team.max_by{ |team_id, goals| goals }.first
-        convert_id_to_name(team_id)
+      convert_id_to_name(team_id)
   end
 
   def lowest_scoring_visitor
@@ -150,17 +150,20 @@ module LeagueModule
     home = average_goals_scored_by_home_team
       team_id = home.min_by{ |team_id, goals| goals }.first.to_i
         teams.find { |team| team_id == team.team_id }.team_name
+  end
+  
+  def winningest_team
 
+    binding.pry
+    # Name of the team with the highest win percentage across all seasons.
   end
 
-  # def winningest_team
-  # end
-  #
-  # def best_fans
-  #
-  # end
+  def best_fans
+
+    # Name of the team with biggest difference between home and away win percentages.
+  end
 
   def  worst_fans
+    # list of names of all teams with better away records than home records.
   end
-
 end

@@ -4,7 +4,7 @@ require_relative 'team'
 require_relative 'game_team'
 require_relative 'game_module'
 require_relative 'league_module'
-require_relative 'team_module_two'
+require_relative 'team_module'
 
 class StatTracker
     include GameModule
@@ -23,7 +23,7 @@ class StatTracker
       games = []
       teams = []
       game_teams = []
-      
+
       CSV.foreach(locations[:games], headers: true, header_converters: :symbol) do |row|
         games << Game.new(row)
       end

@@ -1,18 +1,20 @@
+require_relative 'test_helper'
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
 require 'pry'
 
 class LeagueTest < Minitest::Test
-  def setup
 
-    locations = {
-      games: 'test/data/game.csv',
-      teams: 'test/data/team_info.csv',
-      game_teams: 'test/data/game_teams_stats.csv'
-    }
-    @stat_tracker = StatTracker.from_csv(locations)
-  end
+    def setup
+      locations = {
+        games: 'test/data/game.csv',
+        teams: 'test/data/team_info.csv',
+        game_teams: 'test/data/game_teams_stats.csv'
+      }
+      @stat_tracker = StatTracker.from_csv(locations)
+    end
+
   def test_it_exists
 
     expected = StatTracker
