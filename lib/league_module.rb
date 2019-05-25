@@ -75,31 +75,50 @@ module LeagueModule
    home_goals
   end
 
-   def average_goals_scored_by_home_team
-    w = Hash.new
+  def average_goals_scored_by_home_team
+    home = Hash.new
     hash = games.group_by{ |game| game.home_team_id }
       hash.each do |team_id, games|
         goals = games.map{ |game| game.home_goals }
         goals = (goals.sum / goals.count.to_f).round(2)
-        w[team_id] = goals
+        home[team_id] = goals
       end
-    w
+    home
+  end
+
+  def average_goals_scored_by_away_team
+    away = Hash.new
+    hash = games.group_by{ |game| game.away_team_id }
+      hash.each do |team_id, games|
+        goals = games.map{ |game| game.away_goals }
+        goals = (goals.sum / goals.count.to_f).round(2)
+        away[team_id] = goals
+      end
+    away
   end
 
   def highest_scoring_visitor
+    away = average_goals_scored_by_away_team
+      team_id = away.max_by{ |team_id, goals| goals }.first.to_i
+        teams.find { |team| team_id == team.team_id }.team_name
   end
 
   def lowest_scoring_visitor
+    away = average_goals_scored_by_away_team
+      team_id = away.min_by{ |team_id, goals| goals }.first.to_i
+        teams.find { |team| team_id == team.team_id }.team_name
   end
 
   def highest_scoring_home_team
-    w = average_goals_scored_by_home_team
-    team_id = w.max_by{ |team_id, goals| goals }.first.to_i
-    teams.find { |team| team_id == team.team_id }.team_name
+    home = average_goals_scored_by_home_team
+      team_id = home.max_by{ |team_id, goals| goals }.first.to_i
+        teams.find { |team| team_id == team.team_id }.team_name
   end
 
   def lowest_scoring_home_team
-
+    home = average_goals_scored_by_home_team
+      team_id = home.min_by{ |team_id, goals| goals }.first.to_i
+        teams.find { |team| team_id == team.team_id }.team_name
   end
 
   def winningest_team
