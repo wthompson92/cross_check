@@ -4,12 +4,14 @@ require_relative 'team'
 require_relative 'game_team'
 require_relative 'game_module'
 require_relative 'league_module'
+require_relative 'season_module'
 require_relative 'team_module'
 
 class StatTracker
     include GameModule
     include TeamModule
     include LeagueModule
+    include SeasonModule
 
     attr_reader :games, :teams, :game_teams
 
