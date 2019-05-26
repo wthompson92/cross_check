@@ -151,10 +151,8 @@ module LeagueModule
       team_id = home.min_by{ |team_id, goals| goals }.first.to_i
         teams.find { |team| team_id == team.team_id }.team_name
   end
-  
-  def winningest_team
 
-    binding.pry
+  def winningest_team
     # Name of the team with the highest win percentage across all seasons.
   end
 

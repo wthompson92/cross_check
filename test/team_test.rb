@@ -63,11 +63,11 @@ class TeamTest < Minitest::Test
   #   assert_equal 0, @stat_tracker.fewest_goals_scored
   # end
   #
-  # def test_opponent_with_lowest_and_highest_win_percentage
-  #   assert_equal "", @stat_tracker.favorite_opponent
-  #   assert_equal "", @stat_tracker.rival
-  # end
-  #
+  def test_opponent_with_lowest_and_highest_win_percentage
+    assert_equal "something", @stat_tracker.favorite_opponent(team_id)
+    assert_equal "something", @stat_tracker.rival
+  end
+
   # def test_biggest_difference_in_scoring
   #   assert_equal 0, @stat_tracker.biggest_team_blowout
   #   assert_equal 0, @stat_tracker.worst_loss

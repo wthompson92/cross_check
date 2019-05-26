@@ -39,9 +39,7 @@ module TeamModule
 
   def total_seasons(team_id)
     seasons = []
-    games_played(team_id).each do |game|
-      seasons << game.season
-    end
+    games_played(team_id).each{ |game| seasons << game.season }
     seasons.uniq
   end
 
@@ -61,7 +59,7 @@ module TeamModule
           end
         end
       end
-      winning_percentage = (wins.to_f / games_by_season * 100).to_i
+      winning_percentage = wins.to_f / games_by_season * 100
       win_percent_by_season.store(season, winning_percentage)
     end
     win_percent_by_season
@@ -90,13 +88,16 @@ module TeamModule
   end
 
   def most_goals_scored
+
   end
 
   def fewest_goals_scored
+
   end
 
-  def favorite_opponent
-    # opponent with lowest win percentage (string)
+  def favorite_opponent(team_id)
+    binding.pry
+    games_played(team_id).group_by{ |game| game.away_team_id != team_id || game.home_team_id != team_id }
   end
 
   def rival
@@ -116,7 +117,30 @@ module TeamModule
     # names as keys and the win percentage against that opponent as a value
   end
 
-  def seasonal_summary
-    # for each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.
-  end
+  # def seasonal_summary(team_id)
+  #   binding.pry
+  #   group_team = games.select do |game|
+  #   team_id == game.home_team_id || team_id == game.away_team_id
+  #   end
+  #   regular_season = group_team.group_by do |team|
+  #   team.type
+  #   end
+  # end
+    # For each season that the team has played,
+    # a hash that has two keys (:regular_season and :postseason),
+    # that each point to a hash with the following keys:
+    # :win_percentage
+    # :total_goals_scored
+    # :total_goals_against
+    # :average_goals_scored
+    # :average_goals_against
+    # for each season that the team has played, a hash that has two keys
+     # (:regular_season and :postseason),
+     # that each point to a hash with the following keys:
+     # :win_percentage,
+     # :total_goals_scored,
+     # :total_goals_against,
+     # :average_goals_scored,
+     # :average_goals_against.
+
 end
