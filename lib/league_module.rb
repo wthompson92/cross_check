@@ -150,17 +150,5 @@ module LeagueModule
     home = average_goals_scored_by_home_team
       team_id = home.min_by{ |team_id, goals| goals }.first.to_i
         teams.find { |team| team_id == team.team_id }.team_name
-
   end
-
-  # def winningest_team
-  # end
-  #
-  # def best_fans
-  #
-  # end
-
-  def  worst_fans
-  end
-
 end

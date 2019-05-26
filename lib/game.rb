@@ -20,7 +20,7 @@ class Game
 
   def initialize(row)
     @game_id = row[:game_id]
-    @season = row[:season].to_i
+    @season = row[:season]
     @type = row[:type]
     @date_time = row[:date_time]
     @away_team_id = row[:away_team_id]
