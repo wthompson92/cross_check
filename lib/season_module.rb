@@ -54,57 +54,58 @@ module SeasonModule
   end
 
 
-    def regular_game_stats(season_id)
-      hash = Hash.new
-      win_count = 0
-      game_count = 0
-      regular_games_by_season(season_id).each do |key, value|
-        value.each do |v|
-        if ((key == v.away_team_id) && v.outcome.include?("away win"))
-         win_count += 1
-         game_count += 1
-       elsif ((key == v.home_team_id) && (v.outcome.include?("home win")))
-          win_count += 1
-          game_count += 1
-        else
-          game_count += 1
-        end
-        percentage = (win_count / game_count.to_f * 100).round(2)
-        hash[key] = percentage
-        end
-     end
-     hash
-   end
-
-   def biggest_bust(season_id)
-     hash = Hash.new
-      regular_game_stats(season_id).each do |key, value|
-      playoff_game_stats(season_id).each do |k, v|
-          bust = value - v
-          hash[key] = bust
-        end
+  def regular_game_stats(season_id)
+    hash = Hash.new
+    win_count = 0
+    game_count = 0
+    regular_games_by_season(season_id).each do |key, value|
+      value.each do |v|
+      if ((key == v.away_team_id) && v.outcome.include?("away win"))
+       win_count += 1
+       game_count += 1
+     elsif ((key == v.home_team_id) && (v.outcome.include?("home win")))
+        win_count += 1
+        game_count += 1
+      else
+        game_count += 1
       end
-      team_id = hash.max.first
-      convert_id_to_name(team_id)
-
+      percentage = (win_count / game_count.to_f * 100).round(2)
+      hash[key] = percentage
+      end
     end
+    hash
+  end
+
+  def biggest_bust(season_id)
+    hash = Hash.new
+    regular_game_stats(season_id).each do |key, value|
+      playoff_game_stats(season_id).each do |k, v|
+        bust = value - v
+        hash[key] = bust
+      end
+    end
+    team_id = hash.max.first
+    convert_id_to_name(team_id)
+  end
 
 
-   def biggest_surprise(season_id)
-       hash = Hash.new
-        regular_game_stats(season_id).each do |key, value|
-        playoff_game_stats(season_id).each do |k, v|
-            surprise = v - value
-            hash[key] = surprise
-          end
-        end
-        team_id = hash.min.first
-        convert_id_to_name(team_id)
-   end
+  def biggest_surprise(season_id)
+    hash = Hash.new
+    regular_game_stats(season_id).each do |key, value|
+      playoff_game_stats(season_id).each do |k, v|
+        surprise = v - value
+        hash[key] = surprise
+      end
+    end
+    team_id = hash.min.first
+    convert_id_to_name(team_id)
+  end
 
-   def winningest_coach_for_season(season_id)
-   end
+  def winningest_coach_for_season(season_id)
+  end
 
-   def worst_coach(season_id)
-   end
-   end
+  def worst_coach(season_id)
+  end
+
+
+end
