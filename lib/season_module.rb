@@ -9,6 +9,13 @@ module SeasonModule
     end
   end
 
+  def get_all_game_teams_game_ids
+    game_teams.map do |game|
+      game.game_id
+  end
+
+
+
   def get_all_games_by_season(season_id)
     games.find_all do |game|
        game.season == season_id
@@ -86,9 +93,7 @@ module SeasonModule
       end
       team_id = hash.max.first
       convert_id_to_name(team_id)
-
     end
-
 
    def biggest_surprise(season_id)
        hash = Hash.new
@@ -103,8 +108,18 @@ module SeasonModule
    end
 
    def winningest_coach_for_season(season_id)
+     matching = []
+     get_all_game_teams_game_ids.each do |game_team|
+     get_all_games_by_season(season_id).each do |game|
+       if game.game.id == game_team.id
+         matching << game
+        end
+      end
+    end
+    matching
    end
+ end 
 
    def worst_coach(season_id)
    end
-   end
+ end
