@@ -132,7 +132,7 @@ module LeagueModule
 
   def highest_scoring_visitor
       team_id = average_goals_scored_by_away_team.max_by{ |team_id, goals| goals }.first
-        convert_id_to_name(team_id)
+      convert_id_to_name(team_id)
   end
 
   def lowest_scoring_visitor
@@ -150,5 +150,5 @@ module LeagueModule
     home = average_goals_scored_by_home_team
       team_id = home.min_by{ |team_id, goals| goals }.first.to_i
         teams.find { |team| team_id == team.team_id }.team_name
-  end
+  end 
 end
