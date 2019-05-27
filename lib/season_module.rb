@@ -114,4 +114,10 @@ module SeasonModule
       end
     end
   end
+
+  def most_accurate_team(season_id)
+    most = accuracy_by_team_by_season(season_id).max_by { |k,v| v }
+    convert_id_to_name(most.first)
+  end
+  
 end
