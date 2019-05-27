@@ -87,16 +87,33 @@ module TeamModule
     (sum.to_f / games_played(team_id).count).round(2)
   end
 
-  def most_goals_scored
-
+  def all_goals(team_id)
+    all_goals = []
+    games_played(team_id).find_all do |game|
+      if game.away_team_id == team_id
+        all_goals << game.away_goals
+      elsif game.home_team_id == team_id
+       all_goals << game.home_goals
+      end
+    end
+    all_goals
   end
 
-  def fewest_goals_scored
+  def most_goals_scored(team_id)
+    all_goals(team_id).max
+  end
 
+  def fewest_goals_scored(team_id)
+    all_goals(team_id).min
+  end
+
+  def win_percentage_against_all_teams(team_id)
+    games_played(team_id).group_by do |game|
+      game.outcome
+    end
   end
 
   def favorite_opponent(team_id)
-    binding.pry
     games_played(team_id).group_by{ |game| game.away_team_id != team_id || game.home_team_id != team_id }
   end
 
