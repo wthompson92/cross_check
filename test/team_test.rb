@@ -18,13 +18,6 @@ class TeamTest < Minitest::Test
     @stat_tracker = StatTracker.from_csv(locations)
   end
 
-  def test_team_by_id
-    expected = @stat_tracker.teams.first
-    actual = @stat_tracker.team_by_id("1")
-
-    assert_equal expected, actual
-  end
-
   def test_team_attributes
     expected = { "team_id" => "1",
       "franchise_id" => "23",
