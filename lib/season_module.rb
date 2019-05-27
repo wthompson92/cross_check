@@ -143,4 +143,13 @@ module SeasonModule
     convert_id_to_name(fewest.first)
   end
 
+  def power_play_goal_percentage(season_id)
+    opportunities = find_games_in_game_teams_by_season(season_id).sum do |game|
+      game.power_play_opportunities
+    end
+    goals = find_games_in_game_teams_by_season(season_id).sum do |game|
+      game.power_play_goals
+    end
+    (goals / opportunities * 100).round(2)
+  end
 end
