@@ -63,7 +63,7 @@ class TeamTest < Minitest::Test
     assert_equal "20162017", @stat_tracker.worst_season("6")
   end
 
-  def test_average_win_percentage_all_games
+  def test_average_win_percentage
 
     expected = 25.0
     actual = @stat_tracker.average_win_percentage("6")
@@ -93,14 +93,21 @@ class TeamTest < Minitest::Test
     assert_equal expected, actual
   end
 
+  def test_outcomes_between_teams
+    expected = [3, 0]
+    actual = @stat_tracker.team_outcomes("6").first
+    assert_equal expected, actual
+  end
+
   def test_biggest_difference_in_scoring
-    skip
-    actual = int
-    expected = @stat_tracker.biggest_team_blowout
+    expected = 5
+    actual =
+     @stat_tracker.biggest_team_blowout("6")
     assert_equal expected, actual
 
-    actual = int
-    expected = @stat_tracker.worst_loss
+    expected = 4
+    actual =
+    @stat_tracker.worst_loss("17")
     assert_equal expected, actual
   end
 

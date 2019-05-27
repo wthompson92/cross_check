@@ -12,8 +12,6 @@ module TeamModule
     "link" => team.link}
   end
 
-#### the method above can replace the two methods above.
-
   def games_played(team_id)
     games.find_all do |game|
       game.away_team_id == team_id || game.home_team_id == team_id
@@ -104,13 +102,29 @@ module TeamModule
     # opponent with highest win percentage (string)
   end
 
-  def biggest_team_blowout
-    # biggest difference between goals for a WIN between team and opponent
+  def team_outcomes(team_id)
+    outcomes = []
+    games_played(team_id).each do |game|
+      if game.home_team_id == team_id
+        outcomes << [game.home_goals, game.away_goals]
+      elsif game.away_team_id == team_id
+        outcomes << [game.away_goals, game.home_goals]
+      end
+    end
+    return outcomes
   end
 
-  def worst_loss
-    # biggest difference between goals for a LOSS between team and opponent
+  def biggest_team_blowout(team_id)
+    greatest_diff = team_outcomes(team_id).map do |outcome|
+      outcome[0] - outcome[1]
+    end.max
   end
+
+  def worst_loss(team_id)
+    greatest_diff = team_outcomes(team_id).map do |outcome|
+      outcome[1] - outcome[0]
+    end.max
+  end  
 
   def head_to_head
     # Record (as a hash - win/loss) against all opponents with the opponents’
