@@ -1,6 +1,6 @@
 module SeasonModule
 
-  def convert_id_to_name(team_id)
+  def convert_id_to_name_season(team_id)
     teams.find do |team|
       if team.team_id == team_id.to_i
        return team.team_name
@@ -91,7 +91,7 @@ module SeasonModule
         end
       end
       team_id = hash.max.first
-      convert_id_to_name(team_id)
+      convert_id_to_name_season(team_id)
     end
 
    def biggest_surprise(season_id)
@@ -103,7 +103,7 @@ module SeasonModule
         end
       end
       team_id = hash.min.first
-      convert_id_to_name(team_id)
+      convert_id_to_name_season(team_id)
    end
 
  def  away_match_game_and_game_team_data(season_id)
