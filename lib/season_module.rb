@@ -63,7 +63,7 @@ module SeasonModule
       if ((key == v.away_team_id) && v.outcome.include?("away win"))
        win_count += 1
        game_count += 1
-     elsif ((key == v.home_team_id) && (v.outcome.include?("home win")))
+      elsif ((key == v.home_team_id) && (v.outcome.include?("home win")))
         win_count += 1
         game_count += 1
       else
@@ -107,5 +107,11 @@ module SeasonModule
   def worst_coach(season_id)
   end
 
-
+  def find_games_in_game_teams_by_season(season_id)
+    game_teams.find_all do |game_team|
+      get_all_games_by_season(season_id).any? do |game|
+        game_team.game_id == game.game_id
+      end
+    end
+  end
 end
