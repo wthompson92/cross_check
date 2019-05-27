@@ -12,7 +12,6 @@ class SeasonTest < Minitest::Test
       game_teams: 'test/data/game_teams_stats.csv'
       }
     @stat_tracker = StatTracker.from_csv(locations)
-    binding.pry
   end
 
   def test_biggest_bust

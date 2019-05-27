@@ -115,6 +115,14 @@ module SeasonModule
     end
   end
 
+  def accuracy_by_team_by_season(season_id)
+    accuracy = {}
+    find_games_in_game_teams_by_season(season_id).each do |game|
+      accuracy[game.team_id] = (game.goals / game.shots.to_f * 100).round(2)
+    end
+    accuracy
+  end
+
   def most_accurate_team(season_id)
     most = accuracy_by_team_by_season(season_id).max_by { |k,v| v }
     convert_id_to_name(most.first)
