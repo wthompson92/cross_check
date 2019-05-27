@@ -158,6 +158,6 @@ module SeasonModule
     goals = find_games_in_game_teams_by_season(season_id).sum do |game|
       game.power_play_goals
     end
-    (goals / opportunities * 100).round(2)
+    (goals.to_f / opportunities * 100).round(2)
   end
 end
