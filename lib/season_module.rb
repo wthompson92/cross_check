@@ -119,5 +119,28 @@ module SeasonModule
     most = accuracy_by_team_by_season(season_id).max_by { |k,v| v }
     convert_id_to_name(most.first)
   end
-  
+
+  def least_accurate_team(season_id)
+    least = accuracy_by_team_by_season(season_id).min_by { |k,v| v }
+    convert_id_to_name(least.first)
+  end
+
+  def hits_per_game_per_season(season_id)
+    hits = {}
+    find_games_in_game_teams_by_season(season_id).each do |game|
+      hits[game.team_id] = game.hits
+    end
+    hits
+  end
+
+  def most_hits(season_id)
+    most = hits_per_game_per_season(season_id).max_by { |k,v,| v }
+    convert_id_to_name(most.first)
+  end
+
+  def fewest_hits(season_id)
+    fewest = hits_per_game_per_season(season_id).min_by { |k,v,| v }
+    convert_id_to_name(fewest.first)
+  end
+
 end
