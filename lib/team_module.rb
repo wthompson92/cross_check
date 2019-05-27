@@ -2,26 +2,9 @@ require 'pry'
 
 module TeamModule
 
-  def team_by_id(team_id)
-    teams.find do |team|
-      team.team_id == team_id
-    end
-  end
-
-  def team_info(team_id)
-    team_obj = team_by_id(team_id)
-      my_team = { "team_id" => team_obj.team_id,
-      "franchise_id" => team_obj.franchise_id,
-      "short_name" => team_obj.short_name,
-      "team_name" => team_obj.team_name,
-      "abbreviation" => team_obj.abbreviation,
-      "link" => team_obj.link }
-  end
-
   def team_info(id)
     team = teams.find{|x| x.team_id == id}
-    team_hash = {
-    "team_id" => team.team_id,
+    team_hash = { "team_id" => team.team_id,
     "franchise_id" => team.franchise_id,
     "short_name" => team.short_name,
     "team_name" => team.team_name,
