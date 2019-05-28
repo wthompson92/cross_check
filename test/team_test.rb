@@ -32,6 +32,10 @@ class TeamTest < Minitest::Test
     assert_equal expected, actual
   end
 
+  def test_games_played_by_season
+    @stat_tracker.games_played_by_season("5",'P')
+  end
+
   def test_games_played_by_team_id
     expected = 6
     actual = @stat_tracker.games_played("6").count
@@ -48,11 +52,8 @@ class TeamTest < Minitest::Test
 
   def test_win_perc_by_season
 
-    seasons = @stat_tracker.total_seasons("6")
-    games = @stat_tracker.games_played("6")
-
     expected = {"20122013" => 100, "20162017" => 50}
-    actual = @stat_tracker.win_perc_by_season(seasons, games, "6")
+    actual = @stat_tracker.win_perc_by_season("6")
 
     assert_equal expected, actual
   end
@@ -120,10 +121,7 @@ class TeamTest < Minitest::Test
   end
 
   def test_seasonal_summary
-
-    seasons = @stat_tracker.total_seasons("5")
-    games = @stat_tracker.games_played("5")
-
+    skip
     expected = {:hash => 50}
     actual = @stat_tracker.seasonal_summary("5")
 

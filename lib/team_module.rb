@@ -24,18 +24,28 @@ module TeamModule
     seasons.uniq
   end
 
-  def win_perc_by_season(seasons, games, team_id)
-    regular = win_perc_by_season_(seasons, games, team_id, "R")
-    post = win_perc_by_season_(seasons, games, team_id, "P")
+  def games_played_by_season(team_id, postseason)
+    games_by_season = games_played(team_id).group_by do |game|
+      game.season
+    end
+    season_games = games_by_season.each do |season,games_in_season|
+      games_by_season[season] = games_in_season.length
+    end
+    season_games
+  end
+
+  def win_perc_by_season(team_id)
+    regular = win_perc_by_season_(team_id, "R")
+    post = win_perc_by_season_(team_id, "P")
     regular.merge(post){|key, oldval, newval| ((newval + oldval) / 2).to_i}
   end
 
-  def win_perc_by_season_(seasons, games, team_id, postseason)
+  def win_perc_by_season_(team_id, postseason)
     win_percent_by_season = {}
-    seasons.find_all do |season|
+    total_seasons(team_id).find_all do |season|
       wins = 0
       games_by_season = 0
-      games.find_all do |game|
+      games_played(team_id).find_all do |game|
         if game.season == season && game.type.include?(postseason)
           games_by_season += 1
           if game.away_team_id == team_id && game.outcome.include?("away")
@@ -55,23 +65,19 @@ module TeamModule
   end
 
   def best_season(team_id)
-    seasons = total_seasons(team_id)
-    games = games_played(team_id)
-    winning_percentages = win_perc_by_season(seasons, games, team_id)
+    winning_percentages = win_perc_by_season(team_id)
     winning_percentages.max_by { |season, win_percent| win_percent }.first
   end
 
   def worst_season(team_id)
-    seasons = total_seasons(team_id)
-    games = games_played(team_id)
-    winning_percentages = win_perc_by_season(seasons, games, team_id)
+    winning_percentages = win_perc_by_season(team_id)
     winning_percentages.min_by { |season, win_percent| win_percent }.first
   end
 
   def average_win_percentage(team_id)
     seasons = total_seasons(team_id)
     games = games_played(team_id)
-    winning_percentages = win_perc_by_season(seasons, games, team_id)
+    winning_percentages = win_perc_by_season(team_id)
     sum = winning_percentages.sum { |season, win_percent| win_percent }
     (sum.to_f / games_played(team_id).count).round(2)
   end
@@ -121,13 +127,13 @@ module TeamModule
   end
 
   def biggest_team_blowout(team_id)
-    greatest_diff = team_outcomes(team_id).map do |outcome|
+    team_outcomes(team_id).map do |outcome|
       outcome[0] - outcome[1]
     end.max
   end
 
   def worst_loss(team_id)
-    greatest_diff = team_outcomes(team_id).map do |outcome|
+    team_outcomes(team_id).map do |outcome|
       outcome[1] - outcome[0]
     end.max
   end
@@ -139,16 +145,15 @@ module TeamModule
 
   def total_goals_scored(team_id, postseason)
     total_goals_by_season = {}
-    away_goals = []
-    home_goals = []
+    goals = []
     total_seasons(team_id).each do |season|
       games.each do |game|
         if game.type.include?(postseason) && game.away_team_id == team_id
-          away_goals << game.away_goals
+          goals << game.away_goals
         elsif game.type.include?(postseason) && game.home_team_id == team_id
-          home_goals << game.home_goals
+          goals << game.home_goals
         end
-      total_goals_by_season[season] = away_goals.sum + home_goals.sum
+      total_goals_by_season[season] = goals.sum
       end
     end
     total_goals_by_season
@@ -162,13 +167,39 @@ module TeamModule
     total_goals_scored(team_id, "P")
   end
 
-  def total_goals_scored_against_reg
+  def total_goals_scored_against(team_id, postseason)
+    total_goals_against_by_season = {}
+    goals = []
+    total_seasons(team_id).each do |season|
+      games.each do |game|
+        games_played_by_season(team_id, postseason)
+        if game.type.include?(postseason) && game.away_team_id == team_id
+          goals << game.home_goals
+        elsif game.type.include?(postseason) && game.home_team_id == team_id
+          goals << game.away_goals
+        end
+      total_goals_against_by_season[season] = goals.sum
+      end
+    end
+    total_goals_against_by_season
   end
 
-  def total_goals_scored_against_post
+  def total_goals_scored_against_reg(team_id)
+    total_goals_against_by_season(team_id, "R")
   end
 
-  def average_goals_scored_reg
+  def total_goals_scored_against_post(team_id)
+    total_goals_against_by_season(team_id, "P")
+  end
+
+  def average_goals_scored_reg(team_id)
+    # winning_percentages = win_perc_by_season(team_id)
+    # sum = winning_percentages.sum { |season, win_percent| win_percent }
+    # (sum.to_f / games_played(team_id).count).round(2)
+
+    average = total_goals_scored(team_id, "R")
+    sum = average.sum { |season, goals| goals }
+    (sum.to_f / games_played_by_season(team_id, "R").count).round(2)
   end
 
   def average_goals_scored_post
