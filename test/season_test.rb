@@ -17,26 +17,30 @@ class SeasonTest < Minitest::Test
 
   def test_biggest_bust
     expected = "Senators"
-    actual = @stat_tracker.biggest_bust("20122013")
+    actual = @stat_tracker.biggest_bust("20172018")
+
     assert_equal expected, actual
   end
 
   def test_biggest_surprise
     expected = "Devils"
-    actual = @stat_tracker.biggest_surprise("20122013")
+    actual = @stat_tracker.biggest_surprise("20172018")
+
     assert_equal expected, actual
   end
 
   def test_winningest_coach_for_season
-    expected = "Dan Lacroix"
+    expected = "Paul MacLean"
     actual = @stat_tracker.winningest_coach("20122013")
+
     assert_equal expected, actual
   end
 
 
   def test_worst_coach_for_season
-    expected = "Kevin Dineen"
+    expected = "Dan Bylsma"
     actual = @stat_tracker.worst_coach("20122013")
+
     assert_equal expected, actual
   end
 
