@@ -70,7 +70,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_power_play_goal_percentage
-    expected = 0.0
+    expected = 16.67
     actual = @stat_tracker.power_play_goal_percentage("20152016")
 
     assert_equal expected, actual
