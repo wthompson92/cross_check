@@ -16,6 +16,7 @@ class TeamTest < Minitest::Test
       game_teams: './test/data/game_teams_stats.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
+    binding.pry
   end
 
   def test_team_attributes
@@ -102,7 +103,7 @@ class TeamTest < Minitest::Test
   def test_biggest_difference_in_scoring
     expected = 5
     actual =
-     @stat_tracker.biggest_team_blowout("6")
+    @stat_tracker.biggest_team_blowout("6")
     assert_equal expected, actual
 
     expected = 4
@@ -119,7 +120,7 @@ class TeamTest < Minitest::Test
   end
 
   def test_seasonal_summary
-  #
+
     seasons = @stat_tracker.total_seasons("5")
     games = @stat_tracker.games_played("5")
 

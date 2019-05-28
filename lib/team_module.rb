@@ -1,5 +1,4 @@
 require 'pry'
-require 'season_module'
 
 module TeamModule
 
@@ -138,12 +137,29 @@ module TeamModule
     # names as keys and the win percentage against that opponent as a value
   end
 
-  def total_goals_scored_by_reg(team_id)
-    
-    {seasons: total_goals}
+  def total_goals_scored(team_id, postseason)
+    total_goals_by_season = {}
+    away_goals = []
+    home_goals = []
+    total_seasons(team_id).each do |season|
+      games.each do |game|
+        if game.type.include?(postseason) && game.away_team_id == team_id
+          away_goals << game.away_goals
+        elsif game.type.include?(postseason) && game.home_team_id == team_id
+          home_goals << game.home_goals
+        end
+      total_goals_by_season[season] = away_goals.sum + home_goals.sum
+      end
+    end
+    total_goals_by_season
   end
 
-  def total_goals_scored_by_post
+  def total_goals_scored_by_reg(team_id)
+    total_goals_scored(team_id, "R")
+  end
+
+  def total_goals_scored_by_post(team_id)
+    total_goals_scored(team_id, "P")
   end
 
   def total_goals_scored_against_reg
