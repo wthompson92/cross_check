@@ -188,7 +188,6 @@ module TeamModule
     post = win_perc_by_season_(seasons, games, team_id, "P")
     total_seasons(team_id).each do |season|
       summary[season] = {regular_season: {win_percentage: regular[season]}}
-
     end
     return summary
   end
