@@ -1,7 +1,7 @@
 module SeasonModule
 
 
-  def convert_id_to_name(team_id)
+  def convert_id_to_name_season(team_id)
     teams.find do |team|
       if team.team_id == team_id.to_i
        return team.team_name
@@ -83,11 +83,23 @@ module SeasonModule
         bust = value - v
         hash[key] = bust
       end
+      team_id = hash.max.first
+      convert_id_to_name_season(team_id)
     end
-    team_id = hash.max.first
-    convert_id_to_name(team_id)
   end
 
+
+   def biggest_surprise(season_id)
+    hash = Hash.new
+      regular_game_stats(season_id).each do |key, value|
+        playoff_game_stats(season_id).each do |k, v|
+          surprise = v - value
+          hash[key] = surprise
+        end
+      end
+      team_id = hash.min.first
+      convert_id_to_name_season(team_id)
+   end
 
   def biggest_surprise(season_id)
     hash = Hash.new
