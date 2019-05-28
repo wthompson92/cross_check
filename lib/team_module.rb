@@ -1,4 +1,5 @@
 require 'pry'
+require 'season_module'
 
 module TeamModule
 
@@ -25,23 +26,31 @@ module TeamModule
   end
 
   def win_perc_by_season(seasons, games, team_id)
+    regular = win_perc_by_season_(seasons, games, team_id, "R")
+    post = win_perc_by_season_(seasons, games, team_id, "P")
+    regular.merge(post){|key, oldval, newval| ((newval + oldval) / 2).to_i}
+  end
+
+  def win_perc_by_season_(seasons, games, team_id, postseason)
     win_percent_by_season = {}
     seasons.find_all do |season|
       wins = 0
       games_by_season = 0
       games.find_all do |game|
-        if game.season == season
+        if game.season == season && game.type.include?(postseason)
           games_by_season += 1
-          if game.away_team_id == team_id && game.outcome.split.first == "away"
+          if game.away_team_id == team_id && game.outcome.include?("away")
             wins += 1
           end
-          if game.home_team_id == team_id && game.outcome.split.first == "home"
+          if game.home_team_id == team_id && game.outcome.include?("home")
             wins += 1
           end
         end
       end
       winning_percentage = wins.to_f / games_by_season * 100
-      win_percent_by_season.store(season, winning_percentage)
+      if !winning_percentage.to_f.nan?
+        win_percent_by_season.store(season, winning_percentage)
+      end
     end
     win_percent_by_season
   end
@@ -74,7 +83,7 @@ module TeamModule
       if game.away_team_id == team_id
         all_goals << game.away_goals
       elsif game.home_team_id == team_id
-       all_goals << game.home_goals
+        all_goals << game.home_goals
       end
     end
     all_goals
@@ -95,11 +104,9 @@ module TeamModule
   end
 
   def favorite_opponent(team_id)
-    games_played(team_id).group_by{ |game| game.away_team_id != team_id || game.home_team_id != team_id }
   end
 
   def rival
-    # opponent with highest win percentage (string)
   end
 
   def team_outcomes(team_id)
@@ -124,37 +131,51 @@ module TeamModule
     greatest_diff = team_outcomes(team_id).map do |outcome|
       outcome[1] - outcome[0]
     end.max
-  end  
+  end
 
   def head_to_head
     # Record (as a hash - win/loss) against all opponents with the opponents’
     # names as keys and the win percentage against that opponent as a value
   end
 
-  # def seasonal_summary(team_id)
-  #   binding.pry
-  #   group_team = games.select do |game|
-  #   team_id == game.home_team_id || team_id == game.away_team_id
-  #   end
-  #   regular_season = group_team.group_by do |team|
-  #   team.type
-  #   end
-  # end
-    # For each season that the team has played,
-    # a hash that has two keys (:regular_season and :postseason),
-    # that each point to a hash with the following keys:
-    # :win_percentage
-    # :total_goals_scored
-    # :total_goals_against
-    # :average_goals_scored
-    # :average_goals_against
-    # for each season that the team has played, a hash that has two keys
-     # (:regular_season and :postseason),
-     # that each point to a hash with the following keys:
-     # :win_percentage,
-     # :total_goals_scored,
-     # :total_goals_against,
-     # :average_goals_scored,
-     # :average_goals_against.
+  def total_goals_scored_by_reg(team_id)
+    
+    {seasons: total_goals}
+  end
+
+  def total_goals_scored_by_post
+  end
+
+  def total_goals_scored_against_reg
+  end
+
+  def total_goals_scored_against_post
+  end
+
+  def average_goals_scored_reg
+  end
+
+  def average_goals_scored_post
+  end
+
+  def average_goals_against_reg
+  end
+
+  def average_goals_against_post
+  end
+
+  def seasonal_summary(team_id)
+    seasons = total_seasons(team_id)
+    games = games_played(team_id)
+    summary = {}
+    regular = win_perc_by_season_(seasons, games, team_id, "R")
+    post = win_perc_by_season_(seasons, games, team_id, "P")
+    total_seasons(team_id).each do |season|
+      summary[season] = {regular_season: {win_percentage: regular[season]}}
+
+    end
+    return summary
+  end
+  # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.
 
 end
