@@ -119,9 +119,13 @@ class TeamTest < Minitest::Test
   end
 
   def test_seasonal_summary
-    skip
-    expected = hash
-    actual = @stat_tracker.seasonal_summary
+  #
+    seasons = @stat_tracker.total_seasons("5")
+    games = @stat_tracker.games_played("5")
+
+    expected = {:hash => 50}
+    actual = @stat_tracker.seasonal_summary("5")
+
     assert_equal expected, actual
   end
 
