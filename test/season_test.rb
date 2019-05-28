@@ -8,23 +8,23 @@ class SeasonTest < Minitest::Test
 
   def setup
     locations = {
-      games: './data/game.csv',
+      games: './test/data/game_season.csv',
       teams: './data/team_info.csv',
-      game_teams: './data/game_teams_stats.csv'
+      game_teams: './test/data/game_teams_stats_season.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
   end
 
   def test_biggest_bust
-    expected = "Senators"
-    actual = @stat_tracker.biggest_bust("20172018")
+    expected = "Canadiens"
+    actual = @stat_tracker.biggest_bust("20122013")
 
     assert_equal expected, actual
   end
 
   def test_biggest_surprise
-    expected = "Devils"
-    actual = @stat_tracker.biggest_surprise("20172018")
+    expected = "Lightning"
+    actual = @stat_tracker.biggest_surprise("20122013")
 
     assert_equal expected, actual
   end
@@ -38,7 +38,7 @@ class SeasonTest < Minitest::Test
 
 
   def test_worst_coach_for_season
-    expected = "Dan Bylsma"
+    expected = "Adam Oates"
     actual = @stat_tracker.worst_coach("20122013")
 
     assert_equal expected, actual
@@ -73,7 +73,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_power_play_goal_percentage
-    expected = 16.67
+    expected = 16.06
     actual = @stat_tracker.power_play_goal_percentage("20152016")
 
     assert_equal expected, actual
