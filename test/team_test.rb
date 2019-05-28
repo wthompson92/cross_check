@@ -16,69 +16,118 @@ class TeamTest < Minitest::Test
       game_teams: './test/data/game_teams_stats.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
-  end
-
-  def test_team_by_id
-    assert_equal @stat_tracker.teams.first, @stat_tracker.team_by_id(1)
+    binding.pry
   end
 
   def test_team_attributes
-    expected = { "team_id" => 1,
-      "franchise_id" => 23,
+    expected = { "team_id" => "1",
+      "franchise_id" => "23",
       "short_name" => "New Jersey",
       "team_name" => "Devils",
       "abbreviation" => "NJD",
       "link" => "/api/v1/teams/1" }
-    assert_equal expected, @stat_tracker.team_info(1)
+
+    actual = @stat_tracker.team_info("1")
+
+    assert_equal expected, actual
   end
 
   def test_games_played_by_team_id
-    assert_equal 6, @stat_tracker.games_played("6").count
+    expected = 6
+    actual = @stat_tracker.games_played("6").count
+
+    assert_equal expected, actual
   end
 
   def test_total_seasons
-    assert_equal 2, @stat_tracker.total_seasons("6").count
+    expected = 2
+    actual = @stat_tracker.total_seasons("6").count
 
+    assert_equal expected, actual
   end
 
-  # def test_win_perc_by_season
-  #   seasons = @stat_tracker.total_seasons("6")
-  #   games = @stat_tracker.games_played("6")
-  #   actual = @stat_tracker.win_perc_by_season(seasons, games, "6")
-  #   assert_equal
-  #   assert_equal
-  # end
+  def test_win_perc_by_season
+
+    seasons = @stat_tracker.total_seasons("6")
+    games = @stat_tracker.games_played("6")
+
+    expected = {"20122013" => 100, "20162017" => 50}
+    actual = @stat_tracker.win_perc_by_season(seasons, games, "6")
+
+    assert_equal expected, actual
+  end
 
   def test_highest_and_lowest_win_percentage
-    assert_equal 20122013, @stat_tracker.best_season("6")
-    assert_equal 20162017, @stat_tracker.worst_season("6")
+
+    assert_equal "20122013", @stat_tracker.best_season("6")
+
+    assert_equal "20162017", @stat_tracker.worst_season("6")
   end
 
-  # def test_average_win_percentage_all_games
-  #   assert_equal 0.0, @stat_tracker.average_win_percentage
-  # end
-  #
-  # def test_most_and_fewest_goals_scored
-  #   assert_equal 0, @stat_tracker.most_goals_scored
-  #   assert_equal 0, @stat_tracker.fewest_goals_scored
-  # end
-  #
+  def test_average_win_percentage
+
+    expected = 25.0
+    actual = @stat_tracker.average_win_percentage("6")
+
+    assert_equal expected, actual
+  end
+
+  def test_most_and_fewest_goals_scored
+
+    expected = 6
+    actual = @stat_tracker.most_goals_scored("6")
+    assert_equal expected, actual
+
+    expected = 1
+    actual = @stat_tracker.fewest_goals_scored("6")
+    assert_equal expected, actual
+  end
+
   def test_opponent_with_lowest_and_highest_win_percentage
-    assert_equal "something", @stat_tracker.favorite_opponent(team_id)
-    assert_equal "something", @stat_tracker.rival
+    skip
+    expected = string
+    actual = @stat_tracker.favorite_opponent
+    assert_equal expected, actual
+
+    expected = string
+    actual = @stat_tracker.rival
+    assert_equal expected, actual
   end
 
-  # def test_biggest_difference_in_scoring
-  #   assert_equal 0, @stat_tracker.biggest_team_blowout
-  #   assert_equal 0, @stat_tracker.worst_loss
-  # end
+  def test_outcomes_between_teams
+    expected = [3, 0]
+    actual = @stat_tracker.team_outcomes("6").first
+    assert_equal expected, actual
+  end
 
-  # def test_head_to_head_for_all_oponents
-  #   assert_equal {key: value}, @stat_tracker.head_to_head
-  # end
-  #
-  # def test_seasonal_summary
-  #   assert_equal {key: value}, @stat_tracker.seasonal_summary
-  # end
+  def test_biggest_difference_in_scoring
+    expected = 5
+    actual =
+    @stat_tracker.biggest_team_blowout("6")
+    assert_equal expected, actual
+
+    expected = 4
+    actual =
+    @stat_tracker.worst_loss("17")
+    assert_equal expected, actual
+  end
+
+  def test_head_to_head_for_all_oponents
+    skip
+    expected = hash
+    actual = @stat_tracker.head_to_head
+    assert_equal expected, actual
+  end
+
+  def test_seasonal_summary
+
+    seasons = @stat_tracker.total_seasons("5")
+    games = @stat_tracker.games_played("5")
+
+    expected = {:hash => 50}
+    actual = @stat_tracker.seasonal_summary("5")
+
+    assert_equal expected, actual
+  end
 
 end
