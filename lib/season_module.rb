@@ -83,11 +83,40 @@ module SeasonModule
         bust = value - v
         hash[key] = bust
       end
+    end
+    team_id = hash.max.first
+    convert_id_to_name(team_id)
+  end
+
+
+  def biggest_surprise(season_id)
+    hash = Hash.new
+    regular_game_stats(season_id).each do |key, value|
+      playoff_game_stats(season_id).each do |k, v|
+        surprise = v - value
+        hash[key] = surprise
+      end
+    end
+    team_id = hash.min.first
+    convert_id_to_name(team_id)
       team_id = hash.max.first
       convert_id_to_name_season(team_id)
     end
   end
 
+  def winningest_coach_for_season(season_id)
+  end
+
+  def worst_coach(season_id)
+  end
+
+  def find_games_in_game_teams_by_season(season_id)
+    game_teams.find_all do |game_team|
+      get_all_games_by_season(season_id).any? do |game|
+        game_team.game_id == game.game_id
+      end
+    end
+  end
 
    def biggest_surprise(season_id)
     hash = Hash.new
