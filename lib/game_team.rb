@@ -31,7 +31,7 @@ class GameTeam
     @pim = row[:pim].to_i
     @pp_opportunities = row[:powerplayopportunities].to_i
     @pp_goals =row[:powerplaygoals].to_i
-    @face_off_win_percentage = row[:faceOffWinPercentage].to_i
+    @face_off_win_percentage = row[:faceoffwinpercentage].to_f
     @giveaways = row[:giveaways].to_i
     @takeaways = row[:takeaways].to_i
   end
