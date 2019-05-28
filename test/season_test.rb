@@ -5,12 +5,13 @@ require './lib/stat_tracker'
 require 'pry'
 
 class SeasonTest < Minitest::Test
+
   def setup
     locations = {
-      games: 'test/data/game.csv',
-      teams: 'test/data/team_info.csv',
-      game_teams: 'test/data/game_teams_stats.csv'
-      }
+      games: './data/game.csv',
+      teams: './data/team_info.csv',
+      game_teams: './data/game_teams_stats.csv'
+    }
     @stat_tracker = StatTracker.from_csv(locations)
 
   end

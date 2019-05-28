@@ -17,7 +17,7 @@ module LeagueModule
 
   def convert_id_to_name(team_id)
     teams.find do |team|
-      if team.team_id == team_id.to_i
+      if team.team_id == team_id
        return team.team_name
       end
     end
@@ -132,7 +132,7 @@ module LeagueModule
 
   def highest_scoring_visitor
       team_id = average_goals_scored_by_away_team.max_by{ |team_id, goals| goals }.first
-      convert_id_to_name(team_id)
+        convert_id_to_name(team_id)
   end
 
   def lowest_scoring_visitor
@@ -142,13 +142,13 @@ module LeagueModule
 
   def highest_scoring_home_team
     home = average_goals_scored_by_home_team
-      team_id = home.max_by{ |team_id, goals| goals }.first.to_i
-        teams.find { |team| team_id == team.team_id }.team_name
+      team_id = home.max_by{ |team_id, goals| goals }.first
+        convert_id_to_name(team_id)
   end
 
   def lowest_scoring_home_team
     home = average_goals_scored_by_home_team
-      team_id = home.min_by{ |team_id, goals| goals }.first.to_i
-        teams.find { |team| team_id == team.team_id }.team_name
-  end 
+      team_id = home.min_by{ |team_id, goals| goals }.first
+        convert_id_to_name(team_id)
+  end
 end
