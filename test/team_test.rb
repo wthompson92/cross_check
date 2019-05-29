@@ -16,7 +16,7 @@ class TeamTest < Minitest::Test
       game_teams: './test/data/game_teams_stats.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
-    binding.pry
+    # binding.pry
   end
 
   def test_team_attributes
@@ -121,8 +121,19 @@ class TeamTest < Minitest::Test
   end
 
   def test_seasonal_summary
-    skip
-    expected = {:hash => 50}
+
+    expected =
+
+    {"20122013"=>
+    {:regular_season=>{:win_percentage=>nil, :total_goals_scored=>0, :total_goals_against=>0, :average_goals_scored=>0, :average_goals_against=>0},
+     :post_season=>{:win_percentage=>40.0, :total_goals_scored=>27, :total_goals_against=>29, :average_goals_scored=>2, :average_goals_against=>2}},
+   "20172018"=>
+    {:regular_season=>{:win_percentage=>100.0, :total_goals_scored=>7, :total_goals_against=>1, :average_goals_scored=>3, :average_goals_against=>0},
+     :post_season=>{:win_percentage=>nil, :total_goals_scored=>0, :total_goals_against=>0, :average_goals_scored=>0, :average_goals_against=>0}},
+   "20162017"=>
+    {:regular_season=>{:win_percentage=>50.0, :total_goals_scored=>6, :total_goals_against=>6, :average_goals_scored=>3, :average_goals_against=>3},
+     :post_season=>{:win_percentage=>nil, :total_goals_scored=>0, :total_goals_against=>0, :average_goals_scored=>0, :average_goals_against=>0}}}
+
     actual = @stat_tracker.seasonal_summary("5")
 
     assert_equal expected, actual
