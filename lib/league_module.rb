@@ -49,6 +49,13 @@ module LeagueModule
     scored_on
   end
 
+  def average_goals_allowed
+    number = number_of_games_total_played_by_each_team
+    total_scored_on_by_team.merge(number) do |k, scored_on, game|
+      scored_on / game.to_f
+    end
+  end
+
   def home_goals_by_team
     home_goals = Hash.new(0)
     get_teams.each do |id|
@@ -98,12 +105,12 @@ module LeagueModule
   end
 
   def best_defense
-    best = total_scored_on_by_team.min_by { |k,v| v }
+    best = average_goals_allowed.min_by { |k,v| v }
     convert_id_to_name(best.first)
   end
 
   def worst_defense
-    worst = total_scored_on_by_team.max_by { |k,v| v }
+    worst = average_goals_allowed.max_by { |k,v| v }
     convert_id_to_name(worst.first)
   end
 
