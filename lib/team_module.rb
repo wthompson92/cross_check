@@ -161,14 +161,6 @@ module TeamModule
     total_goals_by_season
   end
 
-  # def total_goals_scored_by_reg(team_id)
-  #   total_goals_scored(team_id, "R")
-  # end
-
-  # def total_goals_scored_by_post(team_id)
-  #   total_goals_scored(team_id, "P")
-  # end
-
   def total_goals_scored_against(team_id, postseason)
     total_goals_against_by_season = {}
     total_seasons(team_id).each do |season|
@@ -187,20 +179,12 @@ module TeamModule
     total_goals_against_by_season
   end
 
-  def total_goals_scored_against_reg(team_id)
-    total_goals_scored_against(team_id, "R")
-  end
-
-  def total_goals_scored_against_post(team_id)
-    total_goals_scored_against(team_id, "P")
-  end
-
-  # def average_goals_scored_reg(team_id)
-  #   average = {}
-  #   total_goals_scored(team_id, "R").each do |season, goals|
-  #     average[season] = goals / games_played_by_season(team_id, "R")[season]
-  #   end
-  #   average
+  # def total_goals_scored_against_reg(team_id)
+  #   total_goals_scored_against(team_id, "R")
+  # end
+  # 
+  # def total_goals_scored_against_post(team_id)
+  #   total_goals_scored_against(team_id, "P")
   # end
 
   def average_goals_scored(team_id, postseason)
@@ -219,7 +203,6 @@ module TeamModule
     average
   end
 
-
   def summary(team_id, postseason, season)
     {
       win_percentage: win_perc_by_season_(team_id, postseason)[season],
@@ -235,21 +218,8 @@ module TeamModule
     total_seasons(team_id).each do |season|
       summary[season] = {
         regular_season: summary(team_id, "R", season),
-        #   win_percentage: win_perc_by_season_(team_id, "R")[season],
-        #   total_goals_scored: total_goals_scored(team_id, p)[season],
-        #   total_goals_against: total_goals_scored_against_reg(team_id)[season],
-        #   average_goals_scored: average_goals_scored_reg(team_id)[season],
-        #   average_goals_against: average_goals_against_reg(team_id)[season]
-
         post_season: summary(team_id, "P", season)
-        # {
-          # win_percentage: win_perc_by_season_(team_id, "P")[season],
-          # total_goals_scored: total_goals_scored_by_post(team_id)[season],
-          # total_goals_against: total_goals_scored_against_post(team_id)[season],
-          # average_goals_scored: average_goals_scored_post(team_id)[season],
-          # average_goals_against: average_goals_against_post(team_id)[season]
-        # }
-    }
+      }
     end
     return summary
   end
