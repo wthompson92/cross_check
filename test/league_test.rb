@@ -74,7 +74,7 @@ class LeagueTest < Minitest::Test
 
     assert_equal expected, actual
 
-    expected  = "Red Wings"
+    expected  = "Maple Leafs"
     actual = @stat_tracker.worst_defense
 
     assert_equal expected, actual

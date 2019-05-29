@@ -26,7 +26,7 @@ module SeasonModule
     playoff_games = get_all_games_by_season(season_id).find_all do |game|
       game.type == ("P")
     end
-    playoff_games.group_by do |game| game.away_team_id || game.home_team_id
+
     end
   end
 
@@ -182,10 +182,10 @@ module SeasonModule
         record << value.outcome
         losses = record.count do |loss|
           loss.include?("away win")
-        end
-        coach_losses[key] = losses
       end
-      coach_losses
+      coach_losses[key] = losses
+    end
+    coach_losses
   end
 
   def worst_coach(season_id)
@@ -245,7 +245,6 @@ module SeasonModule
     end
     goals = find_games_in_game_teams_by_season(season_id).sum do |game|
       game.pp_goals
-    end
     (goals.to_f / opportunities * 100).round(2)
   end
 end
