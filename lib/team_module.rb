@@ -179,14 +179,6 @@ module TeamModule
     total_goals_against_by_season
   end
 
-  # def total_goals_scored_against_reg(team_id)
-  #   total_goals_scored_against(team_id, "R")
-  # end
-  # 
-  # def total_goals_scored_against_post(team_id)
-  #   total_goals_scored_against(team_id, "P")
-  # end
-
   def average_goals_scored(team_id, postseason)
     average = {}
     total_goals_scored(team_id, postseason).each do |season, goals|
