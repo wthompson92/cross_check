@@ -28,7 +28,7 @@ module TeamModule
     games_by_season = games_played(team_id).group_by do |game|
       game.season
     end
-    season_games = games_by_season.each do |season,games_in_season|
+    season_games = games_by_season.each do |season, games_in_season|
       games_by_season[season] = games_in_season.length
     end
     season_games
@@ -145,84 +145,112 @@ module TeamModule
 
   def total_goals_scored(team_id, postseason)
     total_goals_by_season = {}
-    goals = []
     total_seasons(team_id).each do |season|
-      games.each do |game|
-        if game.type.include?(postseason) && game.away_team_id == team_id
-          goals << game.away_goals
-        elsif game.type.include?(postseason) && game.home_team_id == team_id
-          goals << game.home_goals
+      goals = []
+      games_played(team_id).find_all do |game|
+        if game.season == season
+          if game.type.include?(postseason) && game.away_team_id == team_id
+            goals << game.away_goals
+          elsif game.type.include?(postseason) && game.home_team_id == team_id
+            goals << game.home_goals
+          end
         end
-      total_goals_by_season[season] = goals.sum
       end
+      total_goals_by_season[season] = goals.sum
     end
     total_goals_by_season
   end
 
-  def total_goals_scored_by_reg(team_id)
-    total_goals_scored(team_id, "R")
-  end
+  # def total_goals_scored_by_reg(team_id)
+  #   total_goals_scored(team_id, "R")
+  # end
 
-  def total_goals_scored_by_post(team_id)
-    total_goals_scored(team_id, "P")
-  end
+  # def total_goals_scored_by_post(team_id)
+  #   total_goals_scored(team_id, "P")
+  # end
 
   def total_goals_scored_against(team_id, postseason)
     total_goals_against_by_season = {}
-    goals = []
     total_seasons(team_id).each do |season|
-      games.each do |game|
-        games_played_by_season(team_id, postseason)
-        if game.type.include?(postseason) && game.away_team_id == team_id
-          goals << game.home_goals
-        elsif game.type.include?(postseason) && game.home_team_id == team_id
-          goals << game.away_goals
+      goals = []
+      games_played(team_id).find_all do |game|
+        if game.season == season
+          if game.type.include?(postseason) && game.away_team_id == team_id
+            goals << game.home_goals
+          elsif game.type.include?(postseason) && game.home_team_id == team_id
+            goals << game.away_goals
+          end
         end
-      total_goals_against_by_season[season] = goals.sum
       end
+      total_goals_against_by_season[season] = goals.sum
     end
     total_goals_against_by_season
   end
 
   def total_goals_scored_against_reg(team_id)
-    total_goals_against_by_season(team_id, "R")
+    total_goals_scored_against(team_id, "R")
   end
 
   def total_goals_scored_against_post(team_id)
-    total_goals_against_by_season(team_id, "P")
+    total_goals_scored_against(team_id, "P")
   end
 
-  def average_goals_scored_reg(team_id)
-    # winning_percentages = win_perc_by_season(team_id)
-    # sum = winning_percentages.sum { |season, win_percent| win_percent }
-    # (sum.to_f / games_played(team_id).count).round(2)
+  # def average_goals_scored_reg(team_id)
+  #   average = {}
+  #   total_goals_scored(team_id, "R").each do |season, goals|
+  #     average[season] = goals / games_played_by_season(team_id, "R")[season]
+  #   end
+  #   average
+  # end
 
-    average = total_goals_scored(team_id, "R")
-    sum = average.sum { |season, goals| goals }
-    (sum.to_f / games_played_by_season(team_id, "R").count).round(2)
+  def average_goals_scored(team_id, postseason)
+    average = {}
+    total_goals_scored(team_id, postseason).each do |season, goals|
+      average[season] = goals / games_played_by_season(team_id, postseason)[season]
+    end
+    average
   end
 
-  def average_goals_scored_post
+  def average_goals_against(team_id, postseason)
+    average = {}
+    total_goals_scored_against(team_id, postseason).each do |season, goals|
+      average[season] = goals / games_played_by_season(team_id, postseason)[season]
+    end
+    average
   end
 
-  def average_goals_against_reg
-  end
 
-  def average_goals_against_post
+  def summary(team_id, postseason, season)
+    {
+      win_percentage: win_perc_by_season_(team_id, postseason)[season],
+      total_goals_scored: total_goals_scored(team_id, postseason)[season],
+      total_goals_against: total_goals_scored_against(team_id, postseason)[season],
+      average_goals_scored: average_goals_scored(team_id, postseason)[season],
+      average_goals_against: average_goals_against(team_id, postseason)[season]
+    }
   end
 
   def seasonal_summary(team_id)
-    seasons = total_seasons(team_id)
-    games = games_played(team_id)
     summary = {}
-    regular = win_perc_by_season_(seasons, games, team_id, "R")
-    post = win_perc_by_season_(seasons, games, team_id, "P")
     total_seasons(team_id).each do |season|
-      summary[season] = {regular_season: {win_percentage: regular[season]}}
+      summary[season] = {
+        regular_season: summary(team_id, "R", season),
+        #   win_percentage: win_perc_by_season_(team_id, "R")[season],
+        #   total_goals_scored: total_goals_scored(team_id, p)[season],
+        #   total_goals_against: total_goals_scored_against_reg(team_id)[season],
+        #   average_goals_scored: average_goals_scored_reg(team_id)[season],
+        #   average_goals_against: average_goals_against_reg(team_id)[season]
 
+        post_season: summary(team_id, "P", season)
+        # {
+          # win_percentage: win_perc_by_season_(team_id, "P")[season],
+          # total_goals_scored: total_goals_scored_by_post(team_id)[season],
+          # total_goals_against: total_goals_scored_against_post(team_id)[season],
+          # average_goals_scored: average_goals_scored_post(team_id)[season],
+          # average_goals_against: average_goals_against_post(team_id)[season]
+        # }
+    }
     end
     return summary
   end
-  # For each season that the team has played, a hash that has two keys (:regular_season and :postseason), that each point to a hash with the following keys: :win_percentage, :total_goals_scored, :total_goals_against, :average_goals_scored, :average_goals_against.
-
 end
