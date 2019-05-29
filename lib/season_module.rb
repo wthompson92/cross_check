@@ -202,13 +202,28 @@ module SeasonModule
     end
   end
 
+  def shots_by_season(season_id)
+    shots = Hash.new(0)
+    find_games_in_game_teams_by_season(season_id).each do |game|
+      shots[game.team_id] += game.shots
+    end
+    shots
+  end
+
+  def goals_by_season(season_id)
+    goals = Hash.new(0)
+    find_games_in_game_teams_by_season(season_id).each do |game|
+      goals[game.team_id] += game.goals
+    end
+    goals
+  end
 
   def accuracy_by_team_by_season(season_id)
-    accuracy = {}
-    find_games_in_game_teams_by_season(season_id).each do |game|
-      accuracy[game.team_id] = (game.goals / game.shots.to_f * 100).round(2)
+    goals = goals_by_season(season_id)
+    shots = shots_by_season(season_id)
+    goals.merge(shots) do |team, goal, shot|
+      goal.to_f / shot
     end
-    accuracy
   end
 
   def most_accurate_team(season_id)
@@ -222,9 +237,9 @@ module SeasonModule
   end
 
   def hits_per_game_per_season(season_id)
-    hits = {}
+    hits = Hash.new(0)
     find_games_in_game_teams_by_season(season_id).each do |game|
-      hits[game.team_id] = game.hits
+      hits[game.team_id] += game.hits
     end
     hits
   end
@@ -240,12 +255,12 @@ module SeasonModule
   end
 
   def power_play_goal_percentage(season_id)
-    opportunities = find_games_in_game_teams_by_season(season_id).sum do |game|
-      game.pp_opportunities
-    end
     goals = find_games_in_game_teams_by_season(season_id).sum do |game|
+      game.goals
+    end
+    power_goals = find_games_in_game_teams_by_season(season_id).sum do |game|
       game.pp_goals
     end
-    (goals.to_f / opportunities * 100).round(2)
+    (power_goals.to_f / goals).round(2)
   end
 end

@@ -8,11 +8,12 @@ class SeasonTest < Minitest::Test
 
   def setup
     locations = {
-      games: './data/game.csv',
+      games: './test/data/game.csv',
       teams: './data/team_info.csv',
-      game_teams: './data/game_teams_stats.csv'
+      game_teams: './test/data/game_teams_stats.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
+    binding.pry
   end
 
   def test_biggest_bust
@@ -77,5 +78,10 @@ class SeasonTest < Minitest::Test
     actual = @stat_tracker.power_play_goal_percentage("20152016")
 
     assert_equal expected, actual
+  end
+
+  def test_find_games_in_game_teams_by_season
+
+    assert_equal " ", @stat_tracker.find_games_in_game_teams_by_season("20172018").count
   end
 end
