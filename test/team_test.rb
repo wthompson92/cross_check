@@ -45,12 +45,16 @@ class TeamTest < Minitest::Test
     assert_equal expected, actual
   end
 
-  def test_win_perc_by_season
-    seasons = @stat_tracker.total_seasons("6")
-    games = @stat_tracker.games_played("6")
+  def test_games_played_by_season
+    expected = 2
+    actual = @stat_tracker.total_seasons("6").count
 
-    expected = {"20122013" => 100, "20162017" => 50}
-    actual = @stat_tracker.win_perc_by_season(seasons, games, "6")
+    assert_equal expected, actual
+  end
+
+  def test_win_perc_by_season
+    expected = {"20122013" => 1.0, "20162017" => 0.5}
+    actual = @stat_tracker.win_perc_by_season("6")
 
     assert_equal expected, actual
   end
@@ -63,8 +67,15 @@ class TeamTest < Minitest::Test
   end
 
   def test_average_win_percentage
-    expected = 25.0
+    expected = 0.25
     actual = @stat_tracker.average_win_percentage("6")
+
+    assert_equal expected, actual
+  end
+
+  def test_all_goals_by_team_id
+    expected = [3, 6, 2, 1, 3, 4]
+    actual = @stat_tracker.all_goals("6")
 
     assert_equal expected, actual
   end
@@ -121,14 +132,71 @@ class TeamTest < Minitest::Test
     assert_equal expected, actual
   end
 
-  def test_seasonal_summary
-    skip
-    seasons = @stat_tracker.total_seasons("5")
-    games = @stat_tracker.games_played("5")
+  def test_goals_scored_by_team_id_and_postseason
+    expected = ["20122013", 27]
+    actual = @stat_tracker.total_goals_scored("5", "P").first
 
-    expected = {:hash => 50}
+    assert_equal expected, actual
+  end
+
+  def test_goals_scored_against_with_parameters
+    expected = ["20122013", 29]
+    actual = @stat_tracker.total_goals_scored_against("5", "P").first
+
+    assert_equal expected, actual
+  end
+
+  def test_average_goals_scored
+    expected = ["20122013", 2]
+    actual = @stat_tracker.average_goals_scored("5", "P").first
+
+    assert_equal expected, actual
+  end
+
+  def test_average_goals_against
+    expected = ["20122013", 2]
+    actual = @stat_tracker.average_goals_against("5", "P").first
+
+    assert_equal expected, actual
+  end
+
+  def test_summary
+  expected = [:win_percentage, 0.4]
+  actual = @stat_tracker.summary("5", "P", "20122013").first
+
+  assert_equal expected, actual
+  end
+
+  def test_seasonal_summary
+
+    expected =
+
+    {"20122013" =>
+    {:regular_season=>
+      {:win_percentage=>nil,
+      :total_goals_scored=>0, :total_goals_against=>0, :average_goals_scored=>0, :average_goals_against=>0},
+    :post_season=>
+      {:win_percentage=>0.4, :total_goals_scored=>27, :total_goals_against=>29, :average_goals_scored=>2, :average_goals_against=>2}},
+
+   "20172018" =>
+    {:regular_season=>
+      {:win_percentage=>1.0,
+      :total_goals_scored=>7, :total_goals_against=>1, :average_goals_scored=>3, :average_goals_against=>0},
+    :post_season=>
+      {:win_percentage=>nil,
+       :total_goals_scored=>0, :total_goals_against=>0, :average_goals_scored=>0, :average_goals_against=>0}},
+
+   "20162017" =>
+    {:regular_season=>
+      {:win_percentage=>0.5,
+        :total_goals_scored=>6, :total_goals_against=>6, :average_goals_scored=>3, :average_goals_against=>3},
+    :post_season=>
+      {:win_percentage=>nil,
+        :total_goals_scored=>0, :total_goals_against=>0, :average_goals_scored=>0, :average_goals_against=>0}}}
+
     actual = @stat_tracker.seasonal_summary("5")
 
     assert_equal expected, actual
   end
+
 end
