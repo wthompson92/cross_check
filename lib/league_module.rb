@@ -62,7 +62,6 @@ module LeagueModule
   end
 
   def away_goals_by_team
-
     away_goals = Hash.new(0)
     get_teams.each do |id|
       games.each do |game|
@@ -82,20 +81,20 @@ module LeagueModule
     hash = Hash.new
     total_goals_scored_by_each_team.map do |key, value|
       number_of_games_total_played_by_each_team.map do |k, v|
-      hash[key] = value / v.to_f
-     end
-   end
-     convert_id_to_name(hash.max.first)
+        hash[key] = value / v.to_f
+      end
+    end
+    convert_id_to_name(hash.max.first)
   end
 
   def worst_offense
     hash = Hash.new
     total_goals_scored_by_each_team.map do |key, value|
       number_of_games_total_played_by_each_team.map do |k, v|
-      hash[key] = value / v.to_f
-     end
-     end
-     convert_id_to_name(hash.min.first)
+        hash[key] = value / v.to_f
+      end
+    end
+    convert_id_to_name(hash.min.first)
   end
 
   def best_defense
@@ -132,23 +131,23 @@ module LeagueModule
 
   def highest_scoring_visitor
       team_id = average_goals_scored_by_away_team.max_by{ |team_id, goals| goals }.first
-        convert_id_to_name(team_id)
+      convert_id_to_name(team_id)
   end
 
   def lowest_scoring_visitor
       team_id = average_goals_scored_by_away_team.min_by{ |team_id, goals| goals }.first
-        convert_id_to_name(team_id)
+      convert_id_to_name(team_id)
   end
 
   def highest_scoring_home_team
     home = average_goals_scored_by_home_team
-      team_id = home.max_by{ |team_id, goals| goals }.first
-        convert_id_to_name(team_id)
+    team_id = home.max_by{ |team_id, goals| goals }.first
+    convert_id_to_name(team_id)
   end
 
   def lowest_scoring_home_team
     home = average_goals_scored_by_home_team
-      team_id = home.min_by{ |team_id, goals| goals }.first
-        convert_id_to_name(team_id)
+    team_id = home.min_by{ |team_id, goals| goals }.first
+    convert_id_to_name(team_id)
   end
 end

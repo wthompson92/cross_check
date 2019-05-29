@@ -16,7 +16,6 @@ class TeamTest < Minitest::Test
       game_teams: './test/data/game_teams_stats.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
-    # binding.pry
   end
 
   def test_team_attributes
@@ -51,6 +50,8 @@ class TeamTest < Minitest::Test
   end
 
   def test_win_perc_by_season
+    seasons = @stat_tracker.total_seasons("6")
+    games = @stat_tracker.games_played("6")
 
     expected = {"20122013" => 100, "20162017" => 50}
     actual = @stat_tracker.win_perc_by_season("6")
@@ -66,7 +67,6 @@ class TeamTest < Minitest::Test
   end
 
   def test_average_win_percentage
-
     expected = 25.0
     actual = @stat_tracker.average_win_percentage("6")
 
@@ -74,13 +74,14 @@ class TeamTest < Minitest::Test
   end
 
   def test_most_and_fewest_goals_scored
-
     expected = 6
     actual = @stat_tracker.most_goals_scored("6")
+
     assert_equal expected, actual
 
     expected = 1
     actual = @stat_tracker.fewest_goals_scored("6")
+
     assert_equal expected, actual
   end
 
@@ -98,6 +99,7 @@ class TeamTest < Minitest::Test
   def test_outcomes_between_teams
     expected = [3, 0]
     actual = @stat_tracker.team_outcomes("6").first
+
     assert_equal expected, actual
   end
 
@@ -105,11 +107,13 @@ class TeamTest < Minitest::Test
     expected = 5
     actual =
     @stat_tracker.biggest_team_blowout("6")
+
     assert_equal expected, actual
 
     expected = 4
     actual =
     @stat_tracker.worst_loss("17")
+
     assert_equal expected, actual
   end
 
@@ -117,6 +121,7 @@ class TeamTest < Minitest::Test
     skip
     expected = hash
     actual = @stat_tracker.head_to_head
+
     assert_equal expected, actual
   end
 
@@ -144,5 +149,4 @@ class TeamTest < Minitest::Test
 
     assert_equal expected, actual
   end
-
 end
