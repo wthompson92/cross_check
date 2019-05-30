@@ -48,10 +48,8 @@ module TeamModule
      sg
   end
 
-  def win_perc_by_season(seasons, games, team_id)
-    regular = win_perc_by_season_(seasons, games, team_id, "R")
-    post = win_perc_by_season_(seasons, games, team_id, "P")
-    regular.merge(post){|key, oldval, newval| ((newval + oldval) / 2).to_i}
+  def win_perc_by_season(team_id)
+    win_perc_by_season_(team_id, "")
   end
 
   def we_won_this_game(team_id,game)
