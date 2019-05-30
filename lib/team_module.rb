@@ -34,6 +34,20 @@ module TeamModule
     end
   end
 
+  def games_shared(team_id)
+     sg = []
+    rivals(team_id).each do |rival|
+       games.each do |game|
+          if game.away_team_id == team_id && game.home_team_id == rival
+            sg << game
+          elsif game.away_team_id == rival && game.home_team_id == team_id
+            sg << game
+          end
+       end
+     end
+     sg
+  end
+
   def win_perc_by_season(team_id)
     win_perc_by_season_(team_id, "")
   end
@@ -187,6 +201,67 @@ module TeamModule
       end
     end
     average
+  end
+
+  def rival_win(team_id)
+    rivals(team_id).each do |rival|
+      rw= []
+      games_shared(team_id).each do |game|
+        if game.away_team_id == rival && game.outcome.include?("away")
+          rw.push(game)
+        elsif game.home_team_id == rival && game.outcome.include?("home")
+          rw.push(game)
+        end
+      end
+    end
+  end
+
+
+  def rivals(team_id)
+     all_rivals = []
+     games_played(team_id).each do |game|
+       if game.away_team_id != team_id && game.home_team_id == team_id
+         all_rivals << game.away_team_id
+       elsif game.away_team_id == team_id && game.home_team_id != team_id
+         all_rivals << game.home_team_id
+       end
+     end
+     all_rivals.uniq
+   end
+
+  def team_wins(team_id)
+    wins = []
+    games_shared(team_id).each do |game|
+      if game.away_team_id == team_id && game.outcome.include?("away") ||
+         game.home_team_id == team_id && game.outcome.include?("home")
+        wins.push(game)
+      end
+    end
+    wins.count.to_f
+  end
+
+  def other_team(team_id)
+    ot = []
+    rivals(team_id).each do |rival|
+      ot << teams.find_all { |team| team.team_id == rival }
+    end
+    ot
+  end
+
+  def favorite_opponent(team_id)
+    hash = {}
+      hash[other_team(team_id)] = (rival_win(team_id).count.to_f/games_shared(team_id).count).round(2)
+      answer = hash.min_by {|team, percent| percent}
+      a = answer[0][0]
+      a.first.team_name
+  end
+
+  def rival(team_id)
+    rival_hash = {}
+      rival_hash[other_team(team_id)] = (rival_win(team_id).count.to_f/games_shared(team_id).count).round(2)
+      answer = rival_hash.max_by{|team, percent| percent}
+      a = answer.first[0]
+      a[0].team_name
   end
 
   def summary(team_id, postseason, season)
