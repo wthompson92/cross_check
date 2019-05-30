@@ -30,7 +30,6 @@ class SeasonTest < Minitest::Test
   end
 
   def test_winningest_coach_for_season
-skip
     expected = "Paul MacLean"
     actual = @stat_tracker.winningest_coach("20122013")
 
@@ -39,7 +38,7 @@ skip
 
 
   def test_worst_coach_for_season
-    skip
+    
     expected = ""
     actual = @stat_tracker.worst_coach("20122013")
 

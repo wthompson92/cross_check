@@ -118,7 +118,7 @@ module LeagueModule
       end
     away
   end
-  
+
   def highest_scoring_visitor
       team_id = average_goals_scored_by_away_team.max_by{ |team_id, goals| goals }.first
       convert_id_to_name(team_id)
