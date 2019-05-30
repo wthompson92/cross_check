@@ -203,6 +203,11 @@ module LeagueModule
     fan_per = (home_win_percent - away_win_percent.to_f).round(2)
     end
   end
+  def worst_fans
+    fans.min[0]
+    t = []
+    t
+  end
 
   def best_fans
     team_stuff = []
@@ -215,12 +220,6 @@ module LeagueModule
     end
     a = team_stuff.uniq.last
     a[0]
-  end
-
-  def worst_fans
-    fans.min[0]
-    t = []
-    t
   end
 
 end
