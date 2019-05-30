@@ -117,6 +117,12 @@ module TeamModule
     all_goals(team_id).min
   end
 
+  def team_jazz(team_id)
+    @teams.find do |team|
+      team.team_id == team_id
+    end
+ end
+
   def team_outcomes(team_id)
     outcomes = []
     games_played(team_id).each do |game|
@@ -203,65 +209,50 @@ module TeamModule
     average
   end
 
-  def rival_win(team_id)
-    rivals(team_id).each do |rival|
-      rw= []
-      games_shared(team_id).each do |game|
-        if game.away_team_id == rival && game.outcome.include?("away")
-          rw.push(game)
-        elsif game.home_team_id == rival && game.outcome.include?("home")
-          rw.push(game)
-        end
-      end
+  def team_stats_for_game(team_id)
+    @game_teams.find_all{ |game| game.team_id == team_id }
+  end
+
+  def results_by_rival(team_id)
+    games = team_stats_for_game(team_id)
+    against{|hash,other_dudes| hash[other_dudes] = {win: 0, lose: 0}}
+    games.each do |gamess|
+      other_dudes = @game_teams.find do |game|
+        game.game_id == gamess.game_id &&
+        game.team_id != gamess.team_id
+      end.team_id
+      outcome = gamess.won ? :win : :lose
+      against[other_dudes][outcome] += 1
     end
+    return against
   end
 
+  def favorite_opponent
+    against = results_by_rival(team_id)
+      fav_rival = against.max_by do |other_dudes, game_stats|
+         stats[:win] / stats[:lose].to_f
+      end[0]
+   get_team(fav_rival).team_name
+  end
 
-  def rivals(team_id)
-     all_rivals = []
-     games_played(team_id).each do |game|
-       if game.away_team_id != team_id && game.home_team_id == team_id
-         all_rivals << game.away_team_id
-       elsif game.away_team_id == team_id && game.home_team_id != team_id
-         all_rivals << game.home_team_id
-       end
-     end
-     all_rivals.uniq
-   end
+  def rival
+    #floats are the worst oh floats are the worst! If i see Nan ever again itll be too soon
+    against = results_by_rival(team_id)
+      rival_id = against.min_by do |other_dudes, game_stats|
+        stats[:win] / stats[:lose].to_f
+      end[0]
+    get_team(rival_id).team_name
+  end
 
-  def team_wins(team_id)
-    wins = []
-    games_shared(team_id).each do |game|
-      if game.away_team_id == team_id && game.outcome.include?("away") ||
-         game.home_team_id == team_id && game.outcome.include?("home")
-        wins.push(game)
-      end
+  def head_to_head
+    #I hate this method so much oh good god. I hate you please die in a fire.
+    heads = {}
+    results_by_rival(team_id).each do |other_dudes_id,outcome|
+      other_name = team_jazz(other_id).team_name
+      games_played = outcome[:win] + outcome[:loss].to_f
+      heads[other_name] = (outcome[:win] / games_played).round(2)
     end
-    wins.count.to_f
-  end
-
-  def other_team(team_id)
-    ot = []
-    rivals(team_id).each do |rival|
-      ot << teams.find_all { |team| team.team_id == rival }
-    end
-    ot
-  end
-
-  def favorite_opponent(team_id)
-    hash = {}
-      hash[other_team(team_id)] = (rival_win(team_id).count.to_f/games_shared(team_id).count).round(2)
-      answer = hash.min_by {|team, percent| percent}
-      a = answer[0][0]
-      a.first.team_name
-  end
-
-  def rival(team_id)
-    rival_hash = {}
-      rival_hash[other_team(team_id)] = (rival_win(team_id).count.to_f/games_shared(team_id).count).round(2)
-      answer = rival_hash.max_by{|team, percent| percent}
-      a = answer.first[0]
-      a[0].team_name
+    heads
   end
 
   def summary(team_id, postseason, season)
