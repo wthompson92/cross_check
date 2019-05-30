@@ -142,6 +142,18 @@ class TeamTest < Minitest::Test
     assert_equal expected, actual
   end
 
+  def test_opponent_with_lowest_and_highest_win_percentage
+    assert_equal "Blue Jackets", @stat_tracker.favorite_opponent("23")
+    assert_equal "Bruins", @stat_tracker.rival("5")
+  end
+
+  def test_win_perc_by_season
+    seasons = @stat_tracker.total_seasons("6")
+    games = @stat_tracker.games_played("6")
+    expected = {"20122013" => 100, "20162017" => 50}
+    assert_equal expected, @stat_tracker.win_perc_by_season(seasons, games, "6")
+  end
+
   def test_summary
     expected = [:win_percentage, 0.4]
     actual = @stat_tracker.summary("5", "P", "20122013").first
