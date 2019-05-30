@@ -117,19 +117,32 @@ module SeasonModule
 
   def away_match_game_and_game_team_data(season_id)
   hash = {}
-  get_all_games_by_season(season_id).map do |game
+  get_all_games_by_season(season_id).map do |game|
    find_games_in_game_teams_by_season(season_id).map do |game_team|
       if game.away_team_id == game_team.team_id
         hash[head_coach] = game
         end
       end
-    end 
-    hash
+      hash
+    end
   end
+
+    def home_match_game_and_game_team_data(season_id)
+    hash = {}
+    get_all_games_by_season(season_id).map do |game|
+     find_games_in_game_teams_by_season(season_id).map do |game_team|
+        if game.home_team_id == game_team.team_id
+          hash[head_coach] = game
+          end
+        end
+        hash
+      end
+    end
+
 
 
   def away_winningest_coach_count(season_id)
-    coach_wins = Hash.new
+    coach_wins = Hash.new`
     record = []
     away_match_game_and_game_team_data(season_id).each do |key, values|
       values.each do |value|
@@ -174,9 +187,9 @@ module SeasonModule
         record << value.outcome
         losses = record.count do |loss|
           loss.include?("home win")
+          coach_losses[key] = losses
         end
       end
-    coach_losses[key] = losses
     end
     coach_losses
   end
@@ -189,8 +202,8 @@ module SeasonModule
         record << value.outcome
         losses = record.count do |loss|
           loss.include?("away win")
+          coach_losses[key] = losses
           end
-      coach_losses[key] = losses
         end
       end
     coach_losses
