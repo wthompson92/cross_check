@@ -99,47 +99,39 @@ class TeamTest < Minitest::Test
   def test_outcomes_between_teams
     expected = [3, 0]
     actual = @stat_tracker.team_outcomes("6").first
-
     assert_equal expected, actual
   end
 
   def test_biggest_difference_in_scoring
     expected = 5
     actual = @stat_tracker.biggest_team_blowout("6")
-
     assert_equal expected, actual
-
     expected = 4
     actual = @stat_tracker.worst_loss("17")
-
     assert_equal expected, actual
   end
 
   def test_goals_scored_by_team_id_and_postseason
     expected = ["20122013", 27]
     actual = @stat_tracker.total_goals_scored("5", "P").first
-
     assert_equal expected, actual
   end
 
   def test_goals_scored_against_with_parameters
     expected = ["20122013", 29]
     actual = @stat_tracker.total_goals_scored_against("5", "P").first
-
     assert_equal expected, actual
   end
 
   def test_average_goals_scored
     expected = ["20122013", 2.7]
     actual = @stat_tracker.average_goals_scored("5", "P").first
-
     assert_equal expected, actual
   end
 
   def test_average_goals_against
     expected = ["20122013", 2.9]
     actual = @stat_tracker.average_goals_against("5", "P").first
-
     assert_equal expected, actual
   end
 
@@ -148,10 +140,14 @@ class TeamTest < Minitest::Test
     assert_equal "Bruins", @stat_tracker.rival("5")
   end
 
+  def test_head_to_head
+    expected = {}
+    assert_equal expected, @stat_tracker.head_to_head
+  end
+
   def test_summary
     expected = [:win_percentage, 0.4]
     actual = @stat_tracker.summary("5", "P", "20122013").first
-
     assert_equal expected, actual
   end
 
