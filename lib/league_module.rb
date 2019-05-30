@@ -157,4 +157,97 @@ module LeagueModule
     team_id = home.min_by{ |team_id, goals| goals }.first
     convert_id_to_name(team_id)
   end
+
+  def team_stats
+    stats = []
+    @teams.each do |team|
+      @game_teams.each{|stat| stats.push(stat) if stat.team_id == team.team_id}
+    end
+    stats
+  end
+
+  def away_wins_a
+    away_win = []
+    @game_teams.each do |stat|
+      if stat.hoa == "away" && stat.won == "TRUE"
+        away_win.push(stat)
+      end
+    end
+    away_win
+  end
+
+  def home_wins_a
+    home_wins_ = []
+    @game_teams.each do |stat|
+      if stat.hoa == "home" && stat.won == "TRUE"
+        home_wins_.push(stat)
+      end
+    end
+    home_wins_
+  end
+
+  def away_games_b
+    away_games_c = []
+    @game_teams.each do |stat|
+      if stat.hoa == "away"
+        away_games_c.push(stat)
+      end
+    end
+    away_games_c
+  end
+
+  def home_games_b
+    home_games = []
+    @game_teams.each do |stat|
+      if stat.hoa == "home"
+        home_games.push(stat)
+      end
+    end
+    home_games
+  end
+
+  def away_win_average
+    away_wins_a.count.to_f / away_games_b.count
+  end
+
+  def home_win_average
+    home_wins_a.count.to_f / home_games_b.count
+  end
+
+  def fin
+    home_win_average - away_win_average
+  end
+
+  def fans_by_team
+    fans = {}
+      fans[teams] = fin
+    fans
+  end
+
+  def win_percentage_by_team
+    win_per_by_team = {}
+    @teams.each do |team|
+      wins = []
+      @game_teams.each{|stat| wins.push(stat) if stat.won == "TRUE" }
+      final = (wins.count.to_f / team_stats.count).round(2)
+      win_per_by_team[team.team_name] = final
+    end
+    win_per_by_team
+  end
+
+  def winningest_team
+    winning = win_percentage_by_team.max_by{|team, percentage| percentage}
+    winning.first
+  end
+
+  def best_fans
+    best = fans_by_team.max_by{|team, percentage| percentage}
+    best[0].first.team_name
+  end
+
+  def worst_fans
+    worst = []
+    fans_by_team.each{ |team, percentage| worst << team.team_name if percentage < 0 }
+    worst
+  end
 end
