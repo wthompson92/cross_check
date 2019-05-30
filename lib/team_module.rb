@@ -34,6 +34,20 @@ module TeamModule
     end
   end
 
+  def games_shared(team_id)
+     sg = []
+    rivals(team_id).each do |rival|
+       games.each do |game|
+          if game.away_team_id == team_id && game.home_team_id == rival
+            sg << game
+          elsif game.away_team_id == rival && game.home_team_id == team_id
+            sg << game
+          end
+       end
+     end
+     sg
+  end
+
   def win_perc_by_season(seasons, games, team_id)
     regular = win_perc_by_season_(seasons, games, team_id, "R")
     post = win_perc_by_season_(seasons, games, team_id, "P")
@@ -190,6 +204,32 @@ module TeamModule
     end
     average
   end
+
+  def rival_win(team_id)
+    rivals(team_id).each do |rival|
+      rw= []
+      games_shared(team_id).each do |game|
+        if game.away_team_id == rival && game.outcome.include?("away")
+          rw.push(game)
+        elsif game.home_team_id == rival && game.outcome.include?("home")
+          rw.push(game)
+        end
+      end
+    end
+  end
+
+
+  def rivals(team_id)
+     all_rivals = []
+     games_played(team_id).each do |game|
+       if game.away_team_id != team_id && game.home_team_id == team_id
+         all_rivals << game.away_team_id
+       elsif game.away_team_id == team_id && game.home_team_id != team_id
+         all_rivals << game.home_team_id
+       end
+     end
+     all_rivals.uniq
+   end
 
   def team_wins(team_id)
     wins = []
