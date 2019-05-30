@@ -205,13 +205,11 @@ module LeagueModule
   end
 
   def best_fans
-    fans.max
-    
+    fans.max[0]
   end
 
   def worst_fans
-    worst = []
-    fans_by_team.each{ |team, percentage| worst << team.team_name if percentage < 0 }
-    worst
+    fans.min[0]
   end
+
 end
