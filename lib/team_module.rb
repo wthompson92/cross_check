@@ -4,7 +4,7 @@ module TeamModule
 
   def team_info(id)
     team = teams.find{|x| x.team_id == id}
-    team_hash = { "team_id" => team.team_id,
+    { "team_id" => team.team_id,
     "franchise_id" => team.franchise_id,
     "short_name" => team.short_name,
     "team_name" => team.team_name,
@@ -25,19 +25,23 @@ module TeamModule
   end
 
   def games_played_by_season(team_id, postseason)
-    games_by_season = games_played(team_id).group_by do |game|
+    games_played(team_id).find_all do |game|
+      game.type == postseason
+    end.group_by do |game|
       game.season
+    end.transform_values do |games_in_season|
+      games_in_season.length
     end
-    season_games = games_by_season.each do |season, games_in_season|
-      games_by_season[season] = games_in_season.length
-    end
-    season_games
   end
 
   def win_perc_by_season(team_id)
-    regular = win_perc_by_season_(team_id, "R")
-    post = win_perc_by_season_(team_id, "P")
-    regular.merge(post){|key, oldval, newval| ((newval + oldval) / 2).to_i}
+    win_perc_by_season_(team_id, "")
+  end
+
+  def we_won_this_game(team_id,game)
+    away_won = game.away_team_id == team_id && game.outcome.include?("away")
+    home_won = game.home_team_id == team_id && game.outcome.include?("home")
+    away_won || home_won
   end
 
   def win_perc_by_season_(team_id, postseason)
@@ -48,12 +52,7 @@ module TeamModule
       games_played(team_id).find_all do |game|
         if game.season == season && game.type.include?(postseason)
           games_by_season += 1
-          if game.away_team_id == team_id && game.outcome.include?("away")
-            wins += 1
-          end
-          if game.home_team_id == team_id && game.outcome.include?("home")
-            wins += 1
-          end
+          wins += 1 if we_won_this_game(team_id,game)
         end
       end
       winning_percentage = wins.to_f / games_by_season
@@ -75,11 +74,13 @@ module TeamModule
   end
 
   def average_win_percentage(team_id)
-    seasons = total_seasons(team_id)
-    games = games_played(team_id)
-    winning_percentages = win_perc_by_season(team_id)
-    sum = winning_percentages.sum { |season, win_percent| win_percent }
-    (sum.to_f / games_played(team_id).count).round(2)
+    team_games = games.find_all do |game|
+      game.home_team_id == team_id || game.away_team_id == team_id
+    end
+    team_wins = games.count do |game|
+      we_won_this_game(team_id, game)
+    end
+    (team_wins / team_games.length.to_f).round(2)
   end
 
   def all_goals(team_id)
@@ -100,18 +101,6 @@ module TeamModule
 
   def fewest_goals_scored(team_id)
     all_goals(team_id).min
-  end
-
-  def win_percentage_against_all_teams(team_id)
-    games_played(team_id).group_by do |game|
-      game.outcome
-    end
-  end
-
-  def favorite_opponent(team_id)
-  end
-
-  def rival
   end
 
   def team_outcomes(team_id)
@@ -136,11 +125,6 @@ module TeamModule
     team_outcomes(team_id).map do |outcome|
       outcome[1] - outcome[0]
     end.max
-  end
-
-  def head_to_head
-    # Record (as a hash - win/loss) against all opponents with the opponents’
-    # names as keys and the win percentage against that opponent as a value
   end
 
   def total_goals_scored(team_id, postseason)
@@ -182,7 +166,12 @@ module TeamModule
   def average_goals_scored(team_id, postseason)
     average = {}
     total_goals_scored(team_id, postseason).each do |season, goals|
-      average[season] = goals / games_played_by_season(team_id, postseason)[season]
+      my_games = games_played_by_season(team_id, postseason)[season].to_f
+      if my_games == 0
+        average[season] = 0.0
+      else
+        average[season] = (goals / my_games).round(2)
+      end
     end
     average
   end
@@ -190,14 +179,19 @@ module TeamModule
   def average_goals_against(team_id, postseason)
     average = {}
     total_goals_scored_against(team_id, postseason).each do |season, goals|
-      average[season] = goals / games_played_by_season(team_id, postseason)[season]
+      my_games = games_played_by_season(team_id, postseason)[season].to_f
+      if my_games == 0
+        average[season] = 0.0
+      else
+        average[season] = (goals / my_games).round(2)
+      end
     end
     average
   end
 
   def summary(team_id, postseason, season)
     {
-      win_percentage: win_perc_by_season_(team_id, postseason)[season],
+      win_percentage: win_perc_by_season_(team_id, postseason)[season].to_f.round(2),
       total_goals_scored: total_goals_scored(team_id, postseason)[season],
       total_goals_against: total_goals_scored_against(team_id, postseason)[season],
       average_goals_scored: average_goals_scored(team_id, postseason)[season],
@@ -210,7 +204,7 @@ module TeamModule
     total_seasons(team_id).each do |season|
       summary[season] = {
         regular_season: summary(team_id, "R", season),
-        post_season: summary(team_id, "P", season)
+        postseason: summary(team_id, "P", season)
       }
     end
     return summary
