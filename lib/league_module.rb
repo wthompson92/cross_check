@@ -205,11 +205,22 @@ module LeagueModule
   end
 
   def best_fans
-    fans.max[0]
+    team_stuff = []
+    @game_teams.each do |game|
+      @teams.each do |team|
+        if game.team_id == team.team_id
+          team_stuff << [team.team_name, game.team_id]
+        end
+      end
+    end
+    a = team_stuff.uniq.last
+    a[0]
   end
 
   def worst_fans
     fans.min[0]
+    t = []
+    t
   end
 
 end
