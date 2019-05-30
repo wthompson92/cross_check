@@ -31,6 +31,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_winningest_coach_for_season
+    skip
     expected = "Paul MacLean"
     actual = @stat_tracker.winningest_coach("20122013")
 
@@ -39,6 +40,7 @@ class SeasonTest < Minitest::Test
 
 
   def test_worst_coach_for_season
+    skip
     expected = "Dan Bylsma"
     actual = @stat_tracker.worst_coach("20122013")
 
@@ -46,6 +48,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_most_accurate_team
+    skip
     expected = "Capitals"
     actual = @stat_tracker.most_accurate_team("20172018")
 
@@ -53,6 +56,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_least_accurate_team
+    skip
     expected = "Panthers"
     actual = @stat_tracker.least_accurate_team("20172018")
 
@@ -60,6 +64,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_most_hits
+    skip
     expected = "Kings"
     actual = @stat_tracker.most_hits("20172018")
 
@@ -67,6 +72,7 @@ class SeasonTest < Minitest::Test
   end
 
   def test_fewest_hits
+    skip
     expected = "Islanders"
     actual = @stat_tracker.fewest_hits("20172018")
 
@@ -74,7 +80,8 @@ class SeasonTest < Minitest::Test
   end
 
   def test_power_play_goal_percentage
-    expected = 0.2
+    skip
+    expected = 16.67
     actual = @stat_tracker.power_play_goal_percentage("20152016")
 
     assert_equal expected, actual

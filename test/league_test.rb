@@ -33,23 +33,32 @@ class LeagueTest < Minitest::Test
   end
 
   def test_total_goals_scored_by_each_team
+    expected = ["6", 19]
+    actual = @stat_tracker.goals_by_team.first
+
+    assert_equal expected, actual
+  end
+
+  def test_league_offense_data
+    expected = "Golden Knights"
+    actual = @stat_tracker.best_offense
+
+    assert_equal expected, actual
+
+    expected = "Sabres"
+    actual = @stat_tracker.worst_offense
+
+    assert_equal expected, actual
     expected = ["6", 16]
     assert_equal expected, @stat_tracker.total_goals_scored_by_each_team.first
   end
 
-  def test_league_offense_data
-    assert_equal "Senators", @stat_tracker.best_offense
-    assert_equal "Devils", @stat_tracker.worst_offense
-  end
-
-  def test_total_scored_on_by_team
-    expected = ["6", 7]
-    assert_equal expected, @stat_tracker.total_scored_on_by_team.first
-  end
-
   def test_best_defense_data
-    assert_equal "Sabres", @stat_tracker.best_defense
-    assert_equal "Maple Leafs", @stat_tracker.worst_defense
+    expected  = "Sabres"
+    actual = @stat_tracker.best_defense
+    assert_equal expected, actual
+    expected  = "Maple Leafs"
+    actual = @stat_tracker.worst_defense
   end
 
   def test_average_home_goals
