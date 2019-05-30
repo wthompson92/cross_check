@@ -1,3 +1,4 @@
+require './lib/league_module'
 module SeasonModule
 
   def convert_id_to_name_season(team_id)
@@ -8,18 +9,19 @@ module SeasonModule
     end
   end
 
+
+  def get_all_games_by_season(season_id)
+    games.find_all do |game|
+      game.season == season_id
+    end
+  end
+
   def get_all_game_teams_game_ids
     hash = Hash.new
     game_teams.map do |game|
       hash[game.head_coach] = game
     end
     hash
-  end
-
-  def get_all_games_by_season(season_id)
-    games.find_all do |game|
-      game.season == season_id
-    end
   end
 
   def playoff_games_by_season(season_id)
