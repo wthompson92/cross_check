@@ -16,7 +16,6 @@ class TeamTest < Minitest::Test
       game_teams: './test/data/game_teams_stats.csv'
     }
     @stat_tracker = StatTracker.from_csv(locations)
-    # binding.pry
   end
 
   def test_team_attributes
@@ -46,12 +45,12 @@ class TeamTest < Minitest::Test
     assert_equal expected, actual
   end
 
-  def test_games_played_by_season
-    expected = 2
-    actual = @stat_tracker.total_seasons("6").count
-
-    assert_equal expected, actual
-  end
+  # def test_games_played_by_season
+  #   expected = 2
+  #   actual = @stat_tracker.games_played_by_season("6", "").count
+  #
+  #   assert_equal expected, actual
+  # end
 
   def test_win_perc_by_season
     expected = {"20122013" => 1.0, "20162017" => 0.5}
@@ -61,10 +60,14 @@ class TeamTest < Minitest::Test
   end
 
   def test_highest_and_lowest_win_percentage
+    expected = "20122013"
+    actual = @stat_tracker.best_season("6")
 
-    assert_equal "20122013", @stat_tracker.best_season("6")
+    assert_equal expected, actual
 
-    assert_equal "20162017", @stat_tracker.worst_season("6")
+    expected =  "20162017"
+    actual = @stat_tracker.worst_season("6")
+    assert_equal expected, actual
   end
 
   def test_average_win_percentage
@@ -102,14 +105,12 @@ class TeamTest < Minitest::Test
 
   def test_biggest_difference_in_scoring
     expected = 5
-    actual =
-    @stat_tracker.biggest_team_blowout("6")
+    actual = @stat_tracker.biggest_team_blowout("6")
 
     assert_equal expected, actual
 
     expected = 4
-    actual =
-    @stat_tracker.worst_loss("17")
+    actual = @stat_tracker.worst_loss("17")
 
     assert_equal expected, actual
   end
@@ -180,17 +181,23 @@ class TeamTest < Minitest::Test
     :postseason=>
       {:win_percentage=>0.0,
        :total_goals_scored=>0,
-       :total_goals_against=>0, :average_goals_scored=>0.0, :average_goals_against=>0.0}},
+       :total_goals_against=>0,
+       :average_goals_scored=>0.0,
+       :average_goals_against=>0.0}},
 
    "20162017" =>
-    {:regular_season=>
-      {:win_percentage=>0.5,
+      {:regular_season=>
+        {:win_percentage=>0.5,
         :total_goals_scored=>6,
-        :total_goals_against=>6, :average_goals_scored=>3.0, :average_goals_against=>3.0},
-    :postseason=>
-      {:win_percentage=>0.0,
+        :total_goals_against=>6,
+        :average_goals_scored=>3.0,
+        :average_goals_against=>3.0},
+      :postseason=>
+        {:win_percentage=>0.0,
         :total_goals_scored=>0,
-        :total_goals_against=>0, :average_goals_scored=>0.0, :average_goals_against=>0.0}}}
+        :total_goals_against=>0,
+        :average_goals_scored=>0.0,
+        :average_goals_against=>0.0}}}
 
     actual = @stat_tracker.seasonal_summary("5")
 
