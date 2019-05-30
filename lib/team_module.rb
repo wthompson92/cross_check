@@ -34,8 +34,10 @@ module TeamModule
     end
   end
 
-  def win_perc_by_season(team_id)
-    win_perc_by_season_(team_id, "")
+  def win_perc_by_season(seasons, games, team_id)
+    regular = win_perc_by_season_(seasons, games, team_id, "R")
+    post = win_perc_by_season_(seasons, games, team_id, "P")
+    regular.merge(post){|key, oldval, newval| ((newval + oldval) / 2).to_i}
   end
 
   def we_won_this_game(team_id,game)
@@ -187,6 +189,41 @@ module TeamModule
       end
     end
     average
+  end
+
+  def team_wins(team_id)
+    wins = []
+    games_shared(team_id).each do |game|
+      if game.away_team_id == team_id && game.outcome.include?("away") ||
+         game.home_team_id == team_id && game.outcome.include?("home")
+        wins.push(game)
+      end
+    end
+    wins.count.to_f
+  end
+
+  def other_team(team_id)
+    ot = []
+    rivals(team_id).each do |rival|
+      ot << teams.find_all { |team| team.team_id == rival }
+    end
+    ot
+  end
+
+  def favorite_opponent(team_id)
+    hash = {}
+      hash[other_team(team_id)] = (rival_win(team_id).count.to_f/games_shared(team_id).count).round(2)
+      answer = hash.min_by {|team, percent| percent}
+      a = answer[0][0]
+      a.first.team_name
+  end
+
+  def rival(team_id)
+    rival_hash = {}
+      rival_hash[other_team(team_id)] = (rival_win(team_id).count.to_f/games_shared(team_id).count).round(2)
+      answer = rival_hash.max_by{|team, percent| percent}
+      a = answer.first[0]
+      a[0].team_name
   end
 
   def summary(team_id, postseason, season)
