@@ -8,10 +8,10 @@ module SeasonModule
     end
   end
 
-  def get_all_game_teams_game_ids
+  def get_all_head_coaches
     hash = Hash.new
     game_teams.map do |game|
-      hash[game.head_coach] = game
+    hash[game.head_coach] = game
     end
     hash
   end
@@ -22,11 +22,19 @@ module SeasonModule
     end
   end
 
+  def find_games_in_game_teams_by_season(season_id)
+    game_teams.find_all do |game_team|
+      get_all_games_by_season(season_id).any? do |game|
+        game_team.game_id == game.game_id
+      end
+    end
+  end
+
   def playoff_games_by_season(season_id)
     playoff_games = get_all_games_by_season(season_id).find_all do |game|
       game.type == ("P")
-    end
-
+      end
+    playoff_games.group_by do |game| game.game_id
     end
   end
 
@@ -34,7 +42,7 @@ module SeasonModule
     regular_games = get_all_games_by_season(season_id).find_all do |game|
       game.type == ("R")
     end
-    regular_games.group_by do |game| game.away_team_id || game.home_team_id
+    regular_games.group_by do |game| game.game_id
     end
   end
 
@@ -42,6 +50,7 @@ module SeasonModule
     hash = Hash.new
     win_count = 0
     game_count = 0
+    find_games_in_game_teams_by_season(season_id) do |game_teams|
     playoff_games_by_season(season_id).each do |key, value|
       value.each do |v|
         if ((key == v.away_team_id) && v.outcome.include?("away win"))
@@ -53,7 +62,7 @@ module SeasonModule
         else
           game_count += 1
         end
-        percentage = (win_count / game_count.to_f * 100).round(2)
+        percentage = (win_count / game_count.to_f).round(2)
         hash[key] = percentage
       end
     end
@@ -75,7 +84,7 @@ module SeasonModule
         else
           game_count += 1
         end
-        percentage = (win_count / game_count.to_f * 100).round(2)
+        percentage = (win_count / game_count.to_f).round(2)
         hash[key] = percentage
       end
     end
@@ -89,8 +98,9 @@ module SeasonModule
         bust = value - v
         hash[key] = bust
       end
+    team_id = hash.max_by do|k,v|
+      v
     end
-    team_id = hash.max.first
     convert_id_to_name_season(team_id)
   end
 
@@ -106,9 +116,9 @@ module SeasonModule
     convert_id_to_name_season(team_id)
   end
 
-  def  away_match_game_and_game_team_data(season_id)
+  def away_match_game_and_game_team_data(season_id)
   hash = {}
-   get_all_game_teams_game_ids.map do |head_coach, game_team|
+   get_all_head_coaches.map do |head_coach, game_team|
      get_all_games_by_season(season_id).map do |game|
       if game.game_id == game_team.game_id && game.away_team_id == game_team.team_id
         hash[head_coach] = game
@@ -120,10 +130,12 @@ module SeasonModule
 
   def home_match_game_and_game_team_data(season_id)
    hash = {}
-    get_all_game_teams_game_ids.map do |head_coach, game_team|
+   games = []
+    get_all_head_coaches.map do |head_coach, game_team|
     get_all_games_by_season(season_id).map do |game|
-      if (game.game_id == game_team.game_id) && (game.home_team_id ==   game_team.team_id)
-        hash[head_coach] = game
+      if (game.game_id == game_team.game_id) && (game.home_team_id == game_team.team_id)
+        games << game
+        hash[head_coach] = games
         end
       end
     end
@@ -133,12 +145,14 @@ module SeasonModule
   def away_winningest_coach_count(season_id)
     coach_wins = Hash.new
     record = []
-    away_match_game_and_game_team_data(season_id).each do |key, value|
+    away_match_game_and_game_team_data(season_id).each do |key, values|
+      values.each do |value|
       record << value.outcome
       wins = record.count do |win|
         win.include?("away win")
-      end
+        end
       coach_wins[key] = wins
+      end
     end
     coach_wins
   end
@@ -146,10 +160,12 @@ module SeasonModule
   def home_winningest_coach_count(season_id)
     coach_wins = Hash.new
     record = []
-    home_match_game_and_game_team_data(season_id).each do |key, value|
+    home_match_game_and_game_team_data(season_id).each do |key, values|
+      values.each do |value|
       record << value.outcome
       wins = record.count do |win|
         win.include?("home win")
+        end
       end
       coach_wins[key] = wins
     end
@@ -157,19 +173,23 @@ module SeasonModule
   end
 
   def winningest_coach(season_id)
-    hash = home_winningest_coach_count(season_id).merge  away_winningest_coach_count(season_id)
-    hash.max_by do |k, v| v
+    hash = home_winningest_coach_count(season_id).merge(away_winningest_coach_count(season_id)) do
+      |key, value, v| value + v
+      end
+      hash.max_by do |k, v| v
     end.first
   end
 
   def away_worst_coach_count(season_id)
     coach_losses = Hash.new
     record = []
-      away_match_game_and_game_team_data(season_id).each do |key, value|
+      away_match_game_and_game_team_data(season_id).each do |key, values|
+        values.each do |value|
         record << value.outcome
         losses = record.count do |loss|
           loss.include?("home win")
         end
+      end
         coach_losses[key] = losses
       end
       coach_losses
@@ -178,18 +198,21 @@ module SeasonModule
   def home_worst_coach_count(season_id)
     coach_losses = Hash.new
     record = []
-      home_match_game_and_game_team_data(season_id).each do |key, value|
+      home_match_game_and_game_team_data(season_id).each do |key, values|
+        values.each do |value|
         record << value.outcome
         losses = record.count do |loss|
           loss.include?("away win")
       end
+
       coach_losses[key] = losses
     end
     coach_losses
   end
 
   def worst_coach(season_id)
-      hash = home_worst_coach_count(season_id).merge  away_worst_coach_count(season_id)
+      hash = home_worst_coach_count(season_id).merge(away_worst_coach_count(season_id)) do |key, value, v| value + v
+      end
       hash.max_by do |k, v|  v
       end.first
     end
@@ -246,5 +269,6 @@ module SeasonModule
     goals = find_games_in_game_teams_by_season(season_id).sum do |game|
       game.pp_goals
     (goals.to_f / opportunities * 100).round(2)
+    end
   end
 end
