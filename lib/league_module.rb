@@ -158,91 +158,55 @@ module LeagueModule
     convert_id_to_name(team_id)
   end
 
-  def team_stats
-    stats = []
-    @teams.each do |team|
-      @game_teams.each{|stat| stats.push(stat) if stat.team_id == team.team_id}
-    end
-    stats
-  end
-
-  def away_wins_a
-    away_win = []
-    @game_teams.each do |stat|
-      if stat.hoa == "away" && stat.won == "TRUE"
-        away_win.push(stat)
-      end
-    end
-    away_win
-  end
-
-  def home_wins_a
-    home_wins_ = []
-    @game_teams.each do |stat|
-      if stat.hoa == "home" && stat.won == "TRUE"
-        home_wins_.push(stat)
-      end
-    end
-    home_wins_
-  end
-
-  def away_games_b
-    away_games_c = []
-    @game_teams.each do |stat|
-      if stat.hoa == "away"
-        away_games_c.push(stat)
-      end
-    end
-    away_games_c
-  end
-
-  def home_games_b
-    home_games = []
-    @game_teams.each do |stat|
-      if stat.hoa == "home"
-        home_games.push(stat)
-      end
-    end
-    home_games
-  end
-
-  def away_win_average
-    away_wins_a.count.to_f / away_games_b.count
-  end
-
-  def home_win_average
-    home_wins_a.count.to_f / home_games_b.count
-  end
-
-  def fin
-    home_win_average - away_win_average
-  end
-
-  def fans_by_team
-    fans = {}
-      fans[teams] = fin
-    fans
-  end
-
   def win_percentage_by_team
     win_per_by_team = {}
-    @teams.each do |team|
+    @teams.each do |teams|
+      relevant_games = []
+      @game_teams.each do |games|
+        if teams.team_id == games.team_id
+          relevant_games << games
+        end
+      end
       wins = []
-      @game_teams.each{|stat| wins.push(stat) if stat.won == "TRUE" }
-      final = (wins.count.to_f / team_stats.count).round(2)
-      win_per_by_team[team.team_name] = final
+      relevant_games.each do |stat|
+        if stat.won == "TRUE"
+          wins << stat
+        end
+      end
+        final = (wins.count/relevant_games.count.to_f).round(2)
+        final = 0.000001 if final.nan?
+        win_per_by_team[teams.team_name] = final
     end
     win_per_by_team
   end
 
   def winningest_team
-    winning = win_percentage_by_team.max_by{|team, percentage| percentage}
-    winning.first
+    a = win_percentage_by_team.max_by{|team, percentage| percentage}
+    a.first
+  end
+
+  def fans
+    gamess = @game_teams.group_by{|teams| teams.team_id}
+    gamess.transform_values do |games|
+    home_wins = 0
+    away_wins = 0
+    games_played_home = 0
+    games_played_away = 0
+    games.each do |game|
+        home_wins += 1 if game.won == "TRUE" && game.hoa == "home"
+        away_wins += 1 if game.won == "TRUE" && game.hoa == "away"
+        games_played_home += 1 if game.hoa == "home"
+        games_played_away += 1 if game.hoa == "away"
+      end
+    home_win_percent = (home_wins/games_played_home.to_f).round(2)
+    away_win_percent = (away_wins/games_played_away.to_f).round(2)
+    fan_per = (home_win_percent - away_win_percent.to_f).round(2)
+    end
   end
 
   def best_fans
-    best = fans_by_team.max_by{|team, percentage| percentage}
-    best[0].first.team_name
+    fans.max
+    
   end
 
   def worst_fans
