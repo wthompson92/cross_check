@@ -1,4 +1,3 @@
-require './lib/league_module'
 module SeasonModule
 
   def convert_id_to_name_season(team_id)
