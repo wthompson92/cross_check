@@ -3,6 +3,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/stat_tracker'
 require 'pry'
+require './lib/league_module'
 
 class LeagueTest < Minitest::Test
   def setup
@@ -15,31 +16,20 @@ class LeagueTest < Minitest::Test
   end
 
   def test_it_exists
-    expected = StatTracker
-    actual = @stat_tracker
-
-    assert_instance_of expected, actual
+    assert_instance_of StatTracker, @stat_tracker
   end
 
   def test_number_of_teams_in_league
-    expected = 31
-    actual = @stat_tracker.count_of_teams
-
-    assert_equal expected, actual
+    assert_equal 31, @stat_tracker.count_of_teams
   end
 
   def test_converted_to_name
-    expected = "Islanders"
-    actual = @stat_tracker.convert_id_to_name("2")
-
-    assert_equal expected, actual
+    assert_equal "Islanders", @stat_tracker.convert_id_to_name("2")
   end
 
   def test_number_of_games_total_played_by_each_team
     expected = ["6", 2]
-    actual = @stat_tracker.number_of_games_total_played_by_each_team.first
-
-    assert_equal expected, actual
+    assert_equal expected, @stat_tracker.number_of_games_total_played_by_each_team.first
   end
 
   def test_total_goals_scored_by_each_team
@@ -59,81 +49,46 @@ class LeagueTest < Minitest::Test
     actual = @stat_tracker.worst_offense
 
     assert_equal expected, actual
-  end
-
-  def test_total_scored_on_by_team
-    expected = ["6", 7]
-    actual = @stat_tracker.total_scored_on_by_team.first
-
-    assert_equal expected, actual
+    expected = ["6", 16]
+    assert_equal expected, @stat_tracker.total_goals_scored_by_each_team.first
   end
 
   def test_best_defense_data
     expected  = "Sabres"
     actual = @stat_tracker.best_defense
-
     assert_equal expected, actual
-
     expected  = "Maple Leafs"
     actual = @stat_tracker.worst_defense
-
-    assert_equal expected, actual
   end
 
   def test_average_home_goals
     expected = ["5", 2.57]
-    actual = @stat_tracker.average_goals_scored_by_home_team.first
-
-    assert_equal expected, actual
+    assert_equal expected, @stat_tracker.average_goals_scored_by_home_team.first
   end
 
   def test_average_away_goals
     expected = ["6", 4.0]
-    actual = @stat_tracker.average_goals_scored_by_away_team.first
-
-    assert_equal expected, actual
+    assert_equal expected, @stat_tracker.average_goals_scored_by_away_team.first
   end
 
   def test_highest_scoring_teams
-    expected = "Oilers"
-    actual =  @stat_tracker.highest_scoring_visitor
-
-    assert_equal expected, actual
-
-    expected = "Golden Knights"
-    actual = @stat_tracker.highest_scoring_home_team
-
-    assert_equal expected, actual
+    assert_equal "Oilers", @stat_tracker.highest_scoring_visitor
+    assert_equal "Golden Knights", @stat_tracker.highest_scoring_home_team
   end
 
   def test_lowest_scoring_teams
-    expected = "Panthers"
-    actual =
-    @stat_tracker.lowest_scoring_visitor
-
-    assert_equal expected, actual
-
-    expected = "Bruins"
-    actual = @stat_tracker.lowest_scoring_home_team
-
-    assert_equal expected, actual
+    assert_equal "Panthers", @stat_tracker.lowest_scoring_visitor
+    assert_equal "Bruins", @stat_tracker.lowest_scoring_home_team
   end
 
   def test_league_winningest_team
-    skip
-    actual = string
-    expected = @league.winningest_team
-    assert_equal expected, actual
+    assert_equal "Devils", @stat_tracker.winningest_team
   end
 
   def test_fan_methods
-    skip
-    expected = string
-    actual = @league.best_fans
-    assert_equal expected, actual
-
-    expected = array
-    actual = @league.worst_fans
-    assert_equal expected, actual
+    assert_equal "Devils", @stat_tracker.best_fans
+    expected = []
+    assert_equal expected, @stat_tracker.worst_fans
   end
+  
 end

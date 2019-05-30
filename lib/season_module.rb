@@ -44,12 +44,10 @@ module SeasonModule
 
   def playoff_game_stats(season_id)
     hash = Hash.new
-    get_all_game_teams_game_by_coach(season_id).each do |key, value|
-    playoff_games_by_season(season_id).each do |game|
+      get_all_game_teams_game_by_coach(season_id).each do |key, value|
+      playoff_games_by_season(season_id).each do |game|
+      end   
     end
-    binding.pry
-
-  end
   end
 
   def regular_game_stats(season_id)
@@ -69,7 +67,6 @@ module SeasonModule
         end
         percentage = (win_count / game_count.to_f * 100).round(2)
         hash[key] = percentage
-        binding.pry
       end
     end
     hash
