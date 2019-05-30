@@ -43,19 +43,19 @@ class LeagueTest < Minitest::Test
   end
 
   def test_total_goals_scored_by_each_team
-    expected = ["6", 16]
-    actual = @stat_tracker.total_goals_scored_by_each_team.first
+    expected = ["6", 19]
+    actual = @stat_tracker.goals_by_team.first
 
     assert_equal expected, actual
   end
 
   def test_league_offense_data
-    expected = "Senators"
+    expected = "Golden Knights"
     actual = @stat_tracker.best_offense
 
     assert_equal expected, actual
 
-    expected = "Devils"
+    expected = "Sabres"
     actual = @stat_tracker.worst_offense
 
     assert_equal expected, actual

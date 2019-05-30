@@ -87,6 +87,7 @@ module LeagueModule
     convert_id_to_name(worst.first)
   end
 
+
   def best_defense
     best = average_goals_allowed.min_by { |k,v| v }
     convert_id_to_name(best.first)
