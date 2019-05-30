@@ -227,7 +227,7 @@ module TeamModule
     return against
   end
 
-  def favorite_opponent
+  def favorite_opponent(team_id)
     against = results_by_rival(team_id)
       fav_rival = against.max_by do |other_dudes, game_stats|
          stats[:win] / stats[:lose].to_f
@@ -235,8 +235,7 @@ module TeamModule
    get_team(fav_rival).team_name
   end
 
-  def rival
-    #floats are the worst oh floats are the worst! If i see Nan ever again itll be too soon
+  def rival(team_id)
     against = results_by_rival(team_id)
       rival_id = against.min_by do |other_dudes, game_stats|
         stats[:win] / stats[:lose].to_f
@@ -244,8 +243,7 @@ module TeamModule
     get_team(rival_id).team_name
   end
 
-  def head_to_head
-    #I hate this method so much oh good god. I hate you please die in a fire.
+  def head_to_head(team_id)
     heads = {}
     results_by_rival(team_id).each do |other_dudes_id,outcome|
       other_name = team_jazz(other_id).team_name

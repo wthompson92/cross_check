@@ -142,7 +142,7 @@ class TeamTest < Minitest::Test
 
   def test_head_to_head
     expected = {}
-    assert_equal expected, @stat_tracker.head_to_head
+    assert_equal expected, @stat_tracker.head_to_head("23")
   end
 
   def test_summary

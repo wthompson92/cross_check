@@ -77,9 +77,9 @@ class LeagueTest < Minitest::Test
   end
 
   def test_fan_methods
-    assert_equal "Devils", @stat_tracker.best_fans
+    assert_equal "Maple Leafs", @stat_tracker.best_fans
     expected = []
     assert_equal expected, @stat_tracker.worst_fans
   end
-  
+
 end
